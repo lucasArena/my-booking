@@ -2,6 +2,11 @@
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
+## App Features
+
+- **Booking confirmation drawer** – review property details and confirm a stay range directly from the search flow.
+- **Booking edit drawer** – open any booking from the My Bookings screen, pick a new stay date, and save the update without leaving the page.
+
 Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
