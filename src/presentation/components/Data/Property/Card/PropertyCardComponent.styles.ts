@@ -20,14 +20,6 @@ export const usePropertyCardComponentStyles = (): Record<
     objectFit: 'cover',
     objectPosition: 'center',
   },
-  ratingChip: (theme: Theme) => ({
-    backgroundColor: alpha(theme.palette.warning.main, 0.18),
-    color: theme.palette.warning.dark,
-    fontWeight: 600,
-    '& .MuiChip-icon': {
-      color: 'inherit',
-    },
-  }),
   cardContent: {
     px: 3,
     pt: 3,
@@ -42,9 +34,5 @@ export const usePropertyCardComponentStyles = (): Record<
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingTop: 2,
-  },
-  detailsButton: {
-    textTransform: 'none',
-    fontWeight: 600,
   },
 })
