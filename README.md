@@ -1,78 +1,128 @@
-# React + TypeScript + Vite
+# My Booking
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+My Booking is a React + TypeScript single-page application for browsing premium properties, booking new stays, and managing existing reservations through an intuitive drawer-driven workflow.
 
-## App Features
+## Getting Started
 
-- **Booking confirmation drawer** – review property details and confirm a stay range directly from the search flow.
-- **Booking edit drawer** – open any booking from the My Bookings screen, pick a new stay date, and save the update without leaving the page.
+### Prerequisites
 
-Currently, two official plugins are available:
+- Node.js ≥ 18
+- Yarn 1 (Classic)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Installation
 
-## React Compiler
+1. Clone this repository.
+2. Install dependencies:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+   ```bash
+   yarn install
+   ```
 
-## Expanding the ESLint configuration
+3. Launch the development server:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+   ```bash
+   yarn dev
+   ```
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+4. Navigate to `http://localhost:5173` (default Vite port) to explore the app.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Environment
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+The project boots with mock property data located in `tests/mocks/Property.mock.ts`. Replace this source or connect real APIs inside the `PropertyProviderComponent` when integrating with a backend.
+
+## Available Scripts
+
+| Command         | Description                                                |
+| --------------- | ---------------------------------------------------------- |
+| `yarn dev`      | Run the Vite development server with hot module reloading. |
+| `yarn build`    | Type-check and generate a production build inside `dist/`. |
+| `yarn preview`  | Serve the production build locally.                        |
+| `yarn lint`     | Execute ESLint across the project.                         |
+| `yarn test`     | Start Vitest in watch mode.                                |
+| `yarn test:run` | Run the Vitest suite once (used in CI).                    |
+
+## Highlights
+
+- **Curated stay discovery** – explore featured properties, filter them by stay dates, and launch booking flows without leaving the page.
+- **In-place booking confirmation** – review property details, validate selected nights, and confirm the stay from a responsive confirmation drawer.
+- **Self-service booking management** – list upcoming reservations, reschedule stays, or cancel directly in the My Bookings screen using a dedicated management drawer.
+- **Reusable design system** – component library based on Material UI, custom hooks, and layered modules that separate domain entities, application utilities, and presentation concerns.
+
+## Tech Stack
+
+- **Framework:** React 19 + TypeScript
+- **Build tooling:** Vite 7 with the official React plugin (Fast Refresh)
+- **UI library:** Material UI 7 with Emotion styling
+- **Date handling:** date-fns & MUI X Date Pickers
+- **Routing:** React Router DOM 7
+- **Notifications:** React Toastify
+- **State & utilities:** Custom context providers (`Application`, `Property`) and helper utilities in `/src/application/utils`
+- **Testing:** Vitest 2 with React Testing Library and user-event
+- **Package management:** Yarn 1 (Classic)
+
+## Architecture Overview
+
+The project follows a lightweight hexagonal-inspired structure that keeps UI, domain models, and orchestration logic isolated:
+
+- `src/domain` – strongly typed entities and DTO contracts (`Property`, `Booking`, `Client`).
+- `src/application` – cross-cutting utilities (date formatting, random IDs, overlap validation) and the routing configuration.
+- `src/presentation`
+  - `components` – reusable UI units (containers, data display, inputs, feedback, providers).
+  - `drawers` – booking confirmation and management drawers implemented with Material UI.
+  - `hooks` – feature-specific logic (`UseBooking`, `UseProperty`, `UseFetch`).
+  - `screens` – top-level pages (Home, Booking Search, My Bookings).
+- `tests` – mirrored folder hierarchy for unit tests covering components, drawers, providers, and utilities.
+
+### Directory Snapshot
+
+```text
+src/
+  application/
+  domain/
+  presentation/
+tests/
+  application/
+  presentation/
+  mocks/
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Aliases configured in `vite.config.ts` allow concise imports such as `@/presentation/...` and `@/tests/...` across the app and test suites.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Core Features
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+1. **Hero-driven Home page** – marketing landing with date-range entry that routes users into the booking search flow.
+2. **Booking search** – sticky filter panel powered by the date range field, property cards sourced from the context API, and a confirmation drawer for finalizing bookings.
+3. **My Bookings dashboard** – lists aggregated reservations grouped by property, supports cancellation and date changes, and adapts drawer placement for mobile vs. desktop breakpoints.
+4. **Context-managed state** – `PropertyProviderComponent` stores property inventory, handles booking mutations, and exposes availability queries with date-overlap validation.
+5. **Accessible UI & feedback** – Material UI theming, responsive layout container, and toast notifications ready for integration with async workflows.
+
+## Testing Strategy
+
+- **Component & drawer tests** live under `tests/presentation/...` and validate rendering, user flows, and integration with mocked hooks.
+- **Utility tests** under `tests/application/utils` ensure deterministic helpers for formatting, parsing, and overlap checks.
+- Testing Library, user-event, and Vitest fake timers drive interactions while `vi.hoisted` mocks isolate Material UI and context behaviours.
+
+Run the full suite anytime:
+
+```bash
+yarn test:run
 ```
+
+## Design Notes & Extensibility
+
+- Swap the mock property dataset for real API calls by adjusting the `PropertyProviderComponent.rules.ts` hooks.
+- Inject additional screens by extending `RoutesConfig` inside `src/application/routes/Routes.tsx`.
+- Style customisations live next to components (e.g., `.styles.ts` + `.rules.ts` pattern) to keep styling and logic modular.
+- Path aliases are defined in `tsconfig.app.json` and `vite.config.ts`; update both when introducing new top-level directories.
+
+## Future Improvements
+
+- Persist bookings across sessions using local storage or a backend API.
+- Add authentication and role management for multi-user scenarios.
+- Integrate analytics around booking funnel conversion.
+
+---
+
+Feel free to open issues or pull requests with ideas, enhancements, or bug reports—happy hacking!
+
+Made with love by Lucas Arena ❤️

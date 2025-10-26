@@ -9,8 +9,13 @@ export const BookingManageDrawer: React.FC<IBookingManageDrawerProps> = ({
   onCallback,
   ...props
 }) => {
-  const { selectedRange, handleClose, handleRangeChange, handleConfirm } =
-    useBookingManageDrawer({ onCallback, ...props })
+  const {
+    selectedRange,
+    disabledDates,
+    handleClose,
+    handleRangeChange,
+    handleConfirm,
+  } = useBookingManageDrawer({ onCallback, ...props })
 
   const { value, ...drawerProps } = props
 
@@ -48,6 +53,7 @@ export const BookingManageDrawer: React.FC<IBookingManageDrawerProps> = ({
             {FormatRangeLabelUtil(selectedRange, 'Select a new stay range')}
           </Typography>
           <InputCalendarRangeComponent
+            disabledDates={disabledDates}
             initialRange={{
               checkIn: selectedRange.checkIn,
               checkOut: selectedRange.checkOut,

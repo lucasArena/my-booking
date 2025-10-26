@@ -10,12 +10,27 @@ import type { TBookingRange } from '@/domain/entities/Booking/Booking.types'
 export const useBookingManageDrawer = (props: IBookingManageDrawerProps) => {
   const { handleFetch, isSuccess } = useUpdateBooking()
 
-  const booking = props.value?.booking
-
   const [selectedRange, setSelectedRange] = useState<TBookingManageDrawerForm>({
     checkIn: null,
     checkOut: null,
   })
+
+  const propertyBookings = props.value?.property.bookings || []
+  const booking = props.value?.booking
+
+  const disabledDates = propertyBookings
+    .filter(propertyBooking => booking && propertyBooking.id !== booking.id)
+    .flatMap(propertyBooking => {
+      const dates: Date[] = []
+      const currentDate = new Date(propertyBooking.checkIn)
+
+      while (currentDate <= propertyBooking.checkOut) {
+        dates.push(new Date(currentDate))
+        currentDate.setDate(currentDate.getDate() + 1)
+      }
+
+      return dates
+    })
 
   const handleRangeChange = useCallback((range: TBookingRange) => {
     setSelectedRange(prevState => ({
@@ -62,6 +77,7 @@ export const useBookingManageDrawer = (props: IBookingManageDrawerProps) => {
   }, [isSuccess])
 
   return {
+    disabledDates,
     selectedRange,
     handleClose,
     handleRangeChange,

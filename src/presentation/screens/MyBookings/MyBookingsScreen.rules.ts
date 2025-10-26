@@ -45,11 +45,9 @@ export const useMyBookingsScreen = () => {
         return
       }
 
-      const { bookings, ...property } = selectedProperty
-
       setSelectedBooking({
-        property,
-        booking: bookings.find(item => item.id === bookingId)!,
+        property: selectedProperty,
+        booking: selectedProperty.bookings.find(item => item.id === bookingId)!,
       })
     },
     [safeData],
