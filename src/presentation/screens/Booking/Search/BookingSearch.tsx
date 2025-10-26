@@ -10,12 +10,13 @@ import { NoDataStateComponent } from '@/presentation/components/Feedback/NoData/
 export const BookingScreen: React.FC = () => {
   const {
     data,
+    emptyMessage,
+    errorMessage,
     handleCloseBookingDrawer,
     handleConfirmBooking,
     handleOpenBookingDrawer,
     handleRangeChange,
     isEmpty,
-    emptyMessage,
     selectedProperty,
     selectedRange,
   } = useBookingSearch()
@@ -54,6 +55,7 @@ export const BookingScreen: React.FC = () => {
           </Stack>
         </Paper>
 
+        {!!errorMessage && <NoDataStateComponent message={errorMessage} />}
         {isEmpty && <NoDataStateComponent message={emptyMessage} />}
 
         <Stack spacing={3}>

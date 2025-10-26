@@ -26,7 +26,22 @@ export const useBookingSearch = () => {
 
   const safeData = data ?? []
 
-  const isEmpty = safeData.length === 0
+  const handleError = () => {
+    if (!selectedRange.checkIn || !selectedRange.checkOut) {
+      return null
+    }
+
+    const isCheckinGreaterThanCheckout =
+      selectedRange.checkIn > selectedRange.checkOut
+
+    if (isCheckinGreaterThanCheckout) {
+      return 'Check-in date must be before check-out date.'
+    }
+  }
+
+  const errorMessage = handleError()
+
+  const isEmpty = !errorMessage && safeData.length === 0
 
   const emptyMessage =
     isEmpty && !selectedRange.checkIn && !selectedRange.checkOut
@@ -46,10 +61,7 @@ export const useBookingSearch = () => {
   }
 
   const handleConfirmBooking = () => {
-    handleFetch({
-      checkIn: selectedRange.checkIn!,
-      checkOut: selectedRange.checkOut!,
-    })
+    navigate('/my-bookings')
   }
 
   const handleRangeChange = (range: TBookingRange) => {
@@ -70,7 +82,7 @@ export const useBookingSearch = () => {
   }
 
   useEffect(() => {
-    if (selectedRange.checkIn && selectedRange.checkOut) {
+    if (!errorMessage && selectedRange.checkIn && selectedRange.checkOut) {
       handleFetch({
         checkIn: selectedRange.checkIn,
         checkOut: selectedRange.checkOut,
@@ -80,8 +92,9 @@ export const useBookingSearch = () => {
   }, [selectedRange])
 
   return {
-    emptyMessage,
     data: safeData,
+    emptyMessage,
+    errorMessage,
     handleCloseBookingDrawer,
     handleConfirmBooking,
     handleFetch,
