@@ -3,7 +3,7 @@ import type {
   IInputCalendarRangeComponentProps,
   TInputCalendarRangeForm,
 } from '@/presentation/components/Inputs/CalendarRange/InputCalendarRangeComponent.types'
-import { isBefore, isSameDay, isWithinInterval } from 'date-fns'
+import { format, isBefore, isSameDay, isWithinInterval } from 'date-fns'
 import { RangePickersDay } from '@/presentation/components/Inputs/CalendarRange/InputCalendarRangeComponent.styles'
 import type { PickersDayProps } from '@mui/x-date-pickers'
 
@@ -28,6 +28,7 @@ const createRangeDaySlot =
         day={day}
         outsideCurrentMonth={outsideCurrentMonth}
         disableMargin
+        data-cy={`calendar-day-${format(dayAsDate, 'yyyy-MM-dd')}`}
         isBetween={isBetween}
         isStart={isStart}
         isEnd={isEnd}

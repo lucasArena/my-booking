@@ -50,6 +50,8 @@ export const DateRangeFieldComponent: React.FC<
         inputProps={{
           readOnly: true,
           tabIndex: -1,
+          'data-cy':
+            props.textFieldProps?.inputProps?.['data-cy'] ?? 'date-range-input',
           ...(props.textFieldProps?.inputProps ?? {}),
         }}
         onClick={handleClick}

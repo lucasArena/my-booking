@@ -19,8 +19,9 @@ export const VerifyHasNoDateOverlapUtil = ({
     return false
   }
 
-  const endsBeforeTargetStarts = endDateToVerifyTime < startDateTime
   const startsAfterTargetEnds = startDateToVerifyTime > endDateTime
+  const endsBeforeTargetStarts = endDateToVerifyTime < startDateTime
 
+  console.log(startsAfterTargetEnds, endsBeforeTargetStarts)
   return endsBeforeTargetStarts || startsAfterTargetEnds
 }
