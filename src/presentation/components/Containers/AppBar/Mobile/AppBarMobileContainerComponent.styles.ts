@@ -9,12 +9,4 @@ export const useAppBarMobileContainerComponentStyles = (): Record<
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  logo: {
-    mr: 2,
-    fontFamily: 'monospace',
-    fontWeight: 700,
-    letterSpacing: '.3rem',
-    color: 'inherit',
-    textDecoration: 'none',
-  },
 })

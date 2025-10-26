@@ -6,20 +6,11 @@ export const useAppBarWebContainerComponentStyles = (): AppBarWebStyles => ({
   contentContainer: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
   },
   buttonContainer: {
     display: 'flex',
     gap: 2,
-  },
-  logo: {
-    cursor: 'pointer',
-    mr: 2,
-    fontFamily: 'monospace',
-    fontWeight: 700,
-    letterSpacing: '.3rem',
-    color: 'inherit',
-    textDecoration: 'none',
   },
   navButton: {
     textTransform: 'none',

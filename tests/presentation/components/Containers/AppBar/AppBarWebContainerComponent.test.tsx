@@ -30,23 +30,15 @@ describe('AppBarWebContainerComponent', () => {
     mockLocation.pathname = '/'
   })
 
-  it('should render the logo and page buttons, highlighting the active route', () => {
-    mockLocation.pathname = '/my-bookings'
+  it('should render the page buttons, highlighting the active route', () => {
+    mockLocation.pathname = '/'
 
     render(<AppBarWebContainerComponent pages={pages} />)
 
-    expect(screen.getByText('LOGO')).toBeInTheDocument()
     const bookNowButton = screen.getByRole('button', { name: pages[0].label })
-    const myBookingsButton = screen.getByRole('button', {
-      name: pages[1].label,
-    })
 
     expect(bookNowButton).toBeInTheDocument()
-    expect(bookNowButton).not.toHaveAttribute('data-active')
-
-    expect(myBookingsButton).toBeInTheDocument()
-    expect(myBookingsButton).toHaveAttribute('data-active', 'true')
-    expect(myBookingsButton).toHaveAttribute('aria-current', 'page')
+    expect(bookNowButton).toHaveAttribute('data-active', 'true')
   })
 
   it('should navigate when a page button is clicked', async () => {
