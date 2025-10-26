@@ -124,7 +124,6 @@ yarn cy:run
 
 - Persist bookings across sessions using local storage or a backend API.
 - Add authentication and role management for multi-user scenarios.
-- Integrate analytics around booking funnel conversion.
 
 ---
 
