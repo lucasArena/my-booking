@@ -7,7 +7,7 @@ describe('GenerateRandomNumberUtil', () => {
     vi.useRealTimers()
   })
 
-  it('returns the current timestamp', () => {
+  it('should return the current timestamp', () => {
     vi.useFakeTimers()
 
     const fixedDate = new Date('2025-03-15T12:00:00Z')

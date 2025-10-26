@@ -8,7 +8,7 @@ describe('VerifyHasNoDateOverlapUtil', () => {
     endDateToVerify: Date,
   ) => ({ startDate, endDate, startDateToVerify, endDateToVerify })
 
-  it('returns true when the periods do not overlap (before)', () => {
+  it('should return true when the periods do not overlap (before)', () => {
     const result = VerifyHasNoDateOverlapUtil(
       createParams(
         new Date(2025, 0, 10),
@@ -21,7 +21,7 @@ describe('VerifyHasNoDateOverlapUtil', () => {
     expect(result).toBe(true)
   })
 
-  it('returns true when the periods do not overlap (after)', () => {
+  it('should return true when the periods do not overlap (after)', () => {
     const result = VerifyHasNoDateOverlapUtil(
       createParams(
         new Date(2025, 0, 10),
@@ -34,7 +34,7 @@ describe('VerifyHasNoDateOverlapUtil', () => {
     expect(result).toBe(true)
   })
 
-  it('returns false when the periods overlap', () => {
+  it('should return false when the periods overlap', () => {
     const result = VerifyHasNoDateOverlapUtil(
       createParams(
         new Date(2025, 0, 10),
@@ -47,7 +47,7 @@ describe('VerifyHasNoDateOverlapUtil', () => {
     expect(result).toBe(false)
   })
 
-  it('returns false when any range is invalid (start >= end)', () => {
+  it('should return false when any range is invalid (start >= end)', () => {
     const invalidOriginal = VerifyHasNoDateOverlapUtil(
       createParams(
         new Date(2025, 0, 10),

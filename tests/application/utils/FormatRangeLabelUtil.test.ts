@@ -3,7 +3,7 @@ import { FormatRangeLabelUtil } from '@/application/utils/FormatRangeLabel/Forma
 const placeholder = 'Add dates'
 
 describe('FormatRangeLabelUtil', () => {
-  it('returns the placeholder when both dates are missing', () => {
+  it('should return the placeholder when both dates are missing', () => {
     const label = FormatRangeLabelUtil(
       { checkIn: null, checkOut: null },
       placeholder,
@@ -12,7 +12,7 @@ describe('FormatRangeLabelUtil', () => {
     expect(label).toBe(placeholder)
   })
 
-  it('formats the full range when both dates are provided', () => {
+  it('should format the full range when both dates are provided', () => {
     const label = FormatRangeLabelUtil(
       {
         checkIn: new Date(2025, 0, 2),
@@ -24,7 +24,7 @@ describe('FormatRangeLabelUtil', () => {
     expect(label).toBe('02 Jan 2025 – 05 Jan 2025')
   })
 
-  it('formats the range when only the check-in date exists', () => {
+  it('should format the range when only the check-in date exists', () => {
     const label = FormatRangeLabelUtil(
       {
         checkIn: new Date(2025, 0, 2),
@@ -36,7 +36,7 @@ describe('FormatRangeLabelUtil', () => {
     expect(label).toBe('02 Jan 2025 – …')
   })
 
-  it('formats the range when only the check-out date exists', () => {
+  it('should format the range when only the check-out date exists', () => {
     const label = FormatRangeLabelUtil(
       {
         checkIn: null,

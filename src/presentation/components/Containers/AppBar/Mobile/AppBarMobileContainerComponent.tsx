@@ -50,15 +50,6 @@ export const AppBarMobileContainerComponent: React.FC<
               </MenuItem>
             ))}
           </Menu>
-
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            sx={styles.logo}
-            onClick={() => handleClick('/')}>
-            LOGO
-          </Typography>
         </Box>
       </Container>
     </AppBar>

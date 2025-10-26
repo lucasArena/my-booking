@@ -1,9 +1,8 @@
-import type { SxProps, Theme } from '@mui/material'
+import type { SystemStyleObject, Theme } from '@mui/system'
 
-export const useAppBarWebContainerComponentStyles = (): Record<
-  string,
-  SxProps<Theme>
-> => ({
+type AppBarWebStyles = Record<string, SystemStyleObject<Theme>>
+
+export const useAppBarWebContainerComponentStyles = (): AppBarWebStyles => ({
   contentContainer: {
     display: 'flex',
     alignItems: 'center',
@@ -21,5 +20,19 @@ export const useAppBarWebContainerComponentStyles = (): Record<
     letterSpacing: '.3rem',
     color: 'inherit',
     textDecoration: 'none',
+  },
+  navButton: {
+    textTransform: 'none',
+    fontWeight: 600,
+    borderRadius: 12,
+    px: 2.5,
+    py: 1,
+  },
+  navButtonActive: {
+    backgroundColor: 'common.white',
+    color: 'primary.main',
+    '&:hover': {
+      backgroundColor: 'grey.100',
+    },
   },
 })

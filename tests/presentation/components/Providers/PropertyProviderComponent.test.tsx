@@ -25,7 +25,7 @@ describe('PropertyProviderComponent', () => {
     generateRandomNumberMock.mockImplementation(() => 123456)
   })
 
-  it('exposes the initial list of properties from the mock data', () => {
+  it('should expose the initial list of properties from the mock data', () => {
     const { result } = renderHook(() => useContext(PropertyContext), {
       wrapper,
     })
@@ -33,7 +33,7 @@ describe('PropertyProviderComponent', () => {
     expect(result.current.properties).toHaveLength(PropertiesMock.length)
   })
 
-  it('manages the booking lifecycle through context actions', () => {
+  it('should manage the booking lifecycle through context actions', () => {
     const { result } = renderHook(() => useContext(PropertyContext), {
       wrapper,
     })
@@ -86,7 +86,7 @@ describe('PropertyProviderComponent', () => {
     expect(result.current.getMyBookedProperties()).toHaveLength(0)
   })
 
-  it('filters properties based on booking overlaps', () => {
+  it('should filter properties based on booking overlaps', () => {
     const { result } = renderHook(() => useContext(PropertyContext), {
       wrapper,
     })

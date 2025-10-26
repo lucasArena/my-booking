@@ -127,7 +127,7 @@ describe('BookingManageDrawer', () => {
     mocks.resetCalendarProps()
   })
 
-  it('renders an inactive drawer when no booking value is provided', () => {
+  it('should render an inactive drawer when no booking value is provided', () => {
     const props = createBaseProps({ value: null })
 
     useBookingManageDrawerMock.mockReturnValue({
@@ -148,7 +148,7 @@ describe('BookingManageDrawer', () => {
     )
   })
 
-  it('renders booking details, passes range props forward, and triggers callbacks', async () => {
+  it('should render booking details, pass range props forward, and trigger callbacks', async () => {
     const handleClose = vi.fn()
     const handleRangeChange = vi.fn()
     const handleConfirm = vi.fn()

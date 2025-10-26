@@ -65,7 +65,7 @@ describe('LayoutContainerComponent', () => {
     webAppBarMock.mockClear()
   })
 
-  it('renders the mobile app bar when the viewport is mobile', () => {
+  it('should render the mobile app bar when the viewport is mobile', () => {
     useMediaQueryMock.mockReturnValue(true)
 
     render(
@@ -87,7 +87,7 @@ describe('LayoutContainerComponent', () => {
     expect(screen.getByText('Content')).toBeInTheDocument()
   })
 
-  it('renders the web app bar when the viewport is desktop', () => {
+  it('should render the web app bar when the viewport is desktop', () => {
     useMediaQueryMock.mockReturnValue(false)
 
     render(

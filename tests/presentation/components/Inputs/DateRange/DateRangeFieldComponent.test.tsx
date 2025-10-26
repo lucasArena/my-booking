@@ -41,7 +41,7 @@ describe('DateRangeFieldComponent', () => {
     calendarRangeMock.mockClear()
   })
 
-  it('shows the placeholder when the range is empty', () => {
+  it('should show the placeholder when the range is empty', () => {
     render(
       <DateRangeFieldComponent
         value={defaultRange}
@@ -53,7 +53,7 @@ describe('DateRangeFieldComponent', () => {
     expect(screen.getByRole('textbox')).toHaveValue('Pick your dates')
   })
 
-  it('opens the calendar popover when clicked', async () => {
+  it('should open the calendar popover when clicked', async () => {
     const user = userEvent.setup()
 
     render(
@@ -77,7 +77,7 @@ describe('DateRangeFieldComponent', () => {
     expect(props.initialRange).toEqual(defaultRange)
   })
 
-  it('applies the selected range when confirmed', async () => {
+  it('should apply the selected range when confirmed', async () => {
     const user = userEvent.setup()
     const handleChange = vi.fn()
     const nextRange: TInputDateRangeForm = {
@@ -109,7 +109,7 @@ describe('DateRangeFieldComponent', () => {
     expect(handleChange).toHaveBeenCalledWith(nextRange)
   })
 
-  it('clears the range when the clear button is pressed', async () => {
+  it('should clear the range when the clear button is pressed', async () => {
     const user = userEvent.setup()
     const handleChange = vi.fn()
     const filledRange: TInputDateRangeForm = {

@@ -26,8 +26,12 @@ export const useBookingSearch = () => {
 
   const safeData = data ?? []
 
-  const isEmpty =
-    !selectedRange.checkIn || !selectedRange.checkOut || safeData.length === 0
+  const isEmpty = safeData.length === 0
+
+  const emptyMessage =
+    isEmpty && !selectedRange.checkIn && !selectedRange.checkOut
+      ? 'Select check-in and check-out dates to see available properties.'
+      : 'No available properties for the selected dates.'
 
   const [selectedProperty, setSelectedProperty] = useState<IProperty | null>(
     null,
@@ -76,6 +80,7 @@ export const useBookingSearch = () => {
   }, [selectedRange])
 
   return {
+    emptyMessage,
     data: safeData,
     handleCloseBookingDrawer,
     handleConfirmBooking,

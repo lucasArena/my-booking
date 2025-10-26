@@ -18,7 +18,7 @@ vi.mock('react-router-dom', async () => {
 
 describe('AppBarMobileContainerComponent', () => {
   const pages: IAppBar[] = [
-    { label: 'Book now', path: '/booking-search', icon: 'calendar_month' },
+    { label: 'Book now', path: '/', icon: 'calendar_month' },
     { label: 'My bookings', path: '/my-bookings', icon: 'book' },
   ]
 
@@ -26,14 +26,13 @@ describe('AppBarMobileContainerComponent', () => {
     mockNavigate.mockClear()
   })
 
-  it('renders the logo and menu button', () => {
+  it('should render the menu trigger', () => {
     render(<AppBarMobileContainerComponent pages={pages} />)
 
-    expect(screen.getByText('LOGO')).toBeInTheDocument()
     expect(screen.getByRole('button')).toBeInTheDocument()
   })
 
-  it('opens the menu and lists all pages when toggled', async () => {
+  it('should open the menu and list all pages when toggled', async () => {
     const user = userEvent.setup()
 
     render(<AppBarMobileContainerComponent pages={pages} />)
@@ -47,7 +46,7 @@ describe('AppBarMobileContainerComponent', () => {
     }
   })
 
-  it('navigates to the selected page and closes the menu', async () => {
+  it('should navigate to the selected page and close the menu', async () => {
     const user = userEvent.setup()
 
     render(<AppBarMobileContainerComponent pages={pages} />)

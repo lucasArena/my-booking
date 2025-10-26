@@ -6,6 +6,7 @@ import { AppBarWebContainerComponent } from '@/presentation/components/Container
 import type { IAppBar } from '@/presentation/components/Containers/AppBar/AppBarContainerComponent.types'
 
 const mockNavigate = vi.fn()
+const mockLocation = { pathname: '/' }
 
 vi.mock('react-router-dom', async () => {
   const actual =
@@ -14,31 +15,41 @@ vi.mock('react-router-dom', async () => {
   return {
     ...actual,
     useNavigate: () => mockNavigate,
+    useLocation: () => mockLocation,
   }
 })
 
 describe('AppBarWebContainerComponent', () => {
   const pages: IAppBar[] = [
-    { label: 'Book now', path: '/booking-search', icon: 'calendar_month' },
+    { label: 'Book now', path: '/', icon: 'calendar_month' },
     { label: 'My bookings', path: '/my-bookings', icon: 'book' },
   ]
 
   beforeEach(() => {
     mockNavigate.mockClear()
+    mockLocation.pathname = '/'
   })
 
-  it('renders the logo and page buttons', () => {
+  it('should render the logo and page buttons, highlighting the active route', () => {
+    mockLocation.pathname = '/my-bookings'
+
     render(<AppBarWebContainerComponent pages={pages} />)
 
     expect(screen.getByText('LOGO')).toBeInTheDocument()
-    for (const page of pages) {
-      expect(
-        screen.getByRole('button', { name: page.label }),
-      ).toBeInTheDocument()
-    }
+    const bookNowButton = screen.getByRole('button', { name: pages[0].label })
+    const myBookingsButton = screen.getByRole('button', {
+      name: pages[1].label,
+    })
+
+    expect(bookNowButton).toBeInTheDocument()
+    expect(bookNowButton).not.toHaveAttribute('data-active')
+
+    expect(myBookingsButton).toBeInTheDocument()
+    expect(myBookingsButton).toHaveAttribute('data-active', 'true')
+    expect(myBookingsButton).toHaveAttribute('aria-current', 'page')
   })
 
-  it('navigates when a page button is clicked', async () => {
+  it('should navigate when a page button is clicked', async () => {
     const user = userEvent.setup()
 
     render(<AppBarWebContainerComponent pages={pages} />)

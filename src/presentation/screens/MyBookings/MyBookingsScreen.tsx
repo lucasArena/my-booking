@@ -37,7 +37,7 @@ export const MyBookingScreen: React.FC = () => {
 
       {isEmpty && (
         <NoDataStateComponent
-          message="No bookings to show."
+          message="You have no bookings yet."
           cta={
             <Button variant="contained" onClick={handleNavigateToBooking}>
               Make a book
@@ -92,9 +92,9 @@ export const MyBookingScreen: React.FC = () => {
                           }}>
                           <Stack
                             direction={{ xs: 'column', sm: 'row' }}
-                            spacing={1.5}
                             alignItems={{ xs: 'flex-start', sm: 'center' }}
-                            justifyContent="space-between">
+                            justifyContent="space-between"
+                            gap={1.5}>
                             <Stack spacing={0.5}>
                               <Typography
                                 variant="caption"
@@ -109,11 +109,14 @@ export const MyBookingScreen: React.FC = () => {
                             </Stack>
 
                             <Stack
+                              width={{ xs: '100%', sm: 'auto' }}
                               direction={{ xs: 'column', sm: 'row' }}
+                              alignItems="center"
                               spacing={1.5}>
                               <Button
                                 size="small"
                                 variant="outlined"
+                                fullWidth
                                 color="error"
                                 disabled={!hasDates}
                                 onClick={event => {
@@ -130,10 +133,12 @@ export const MyBookingScreen: React.FC = () => {
                               <Button
                                 size="small"
                                 variant="outlined"
+                                sx={{ minWidth: '180px' }}
                                 endIcon={
                                   <Icon fontSize="small">arrow_forward</Icon>
                                 }
                                 disabled={!hasDates}
+                                fullWidth
                                 onClick={event => {
                                   event.stopPropagation()
 

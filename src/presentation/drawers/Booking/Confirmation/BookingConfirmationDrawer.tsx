@@ -4,10 +4,14 @@ import { Puller } from '@/presentation/drawers/Booking/Confirmation/BookingConfi
 import type { IBookingConfirmationDrawerProps } from '@/presentation/drawers/Booking/Confirmation/BookingConfirmationDrawer.types'
 import { useBookingConfirmationDrawer } from '@/presentation/drawers/Booking/Confirmation/BookingConfirmationDrawer.rules'
 
-export const BookingDrawer: React.FC<
-  IBookingConfirmationDrawerProps
-> = props => {
-  const { stayLabel, handleConfirm } = useBookingConfirmationDrawer(props)
+export const BookingDrawer: React.FC<IBookingConfirmationDrawerProps> = ({
+  selectedRange,
+  ...props
+}) => {
+  const { stayLabel, handleConfirm } = useBookingConfirmationDrawer({
+    selectedRange,
+    ...props,
+  })
 
   const { property, onCancel, ...drawerProps } = props
 

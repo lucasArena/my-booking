@@ -68,7 +68,7 @@ describe('BookingDrawer', () => {
     useBookingConfirmationDrawerMock.mockReset()
   })
 
-  it('renders the drawer container without content when there is no selected property', () => {
+  it('should render the drawer container without content when there is no selected property', () => {
     const props = createBaseProps({ property: null })
 
     useBookingConfirmationDrawerMock.mockReturnValue({
@@ -84,7 +84,7 @@ describe('BookingDrawer', () => {
     expect(screen.queryByText('Confirm your stay')).not.toBeInTheDocument()
   })
 
-  it('renders property details and notifies callbacks when actions are triggered', async () => {
+  it('should render property details and notify callbacks when actions are triggered', async () => {
     const handleConfirm = vi.fn()
     const onCancel = vi.fn()
     const onClose = vi.fn()

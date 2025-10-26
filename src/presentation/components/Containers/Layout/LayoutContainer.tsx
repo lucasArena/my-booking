@@ -10,7 +10,7 @@ export const LayoutContainerComponent: React.FC<React.PropsWithChildren> = ({
   const pages = [
     {
       label: 'Book now',
-      path: '/booking-search',
+      path: '/',
       icon: 'calendar_month_outlined',
     },
     { label: 'My bookings', path: '/my-bookings', icon: 'house_outlined' },

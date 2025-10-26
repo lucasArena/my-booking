@@ -39,7 +39,7 @@ describe('InputCalendarRangeComponent', () => {
     latestProps = undefined
   })
 
-  it('renders the static date picker with default configuration', () => {
+  it('should render the static date picker with default configuration', () => {
     render(<InputCalendarRangeComponent onRangeChange={vi.fn()} />)
 
     const props = getLatestProps()
@@ -51,7 +51,7 @@ describe('InputCalendarRangeComponent', () => {
     expect(props.localeText.toolbarTitle).toBe('Select date range')
   })
 
-  it('updates the range and notifies when dates are selected', async () => {
+  it('should update the range and notify when dates are selected', async () => {
     const onRangeChange = vi.fn()
     render(<InputCalendarRangeComponent onRangeChange={onRangeChange} />)
 
@@ -80,7 +80,7 @@ describe('InputCalendarRangeComponent', () => {
     await waitFor(() => expect(getLatestProps().value).toEqual(secondDate))
   })
 
-  it('disables provided dates and prevents dates before the selected check-in', async () => {
+  it('should disable provided dates and prevent dates before the selected check-in', async () => {
     const disabledDate = new Date('2025-02-01')
     const checkInDate = new Date('2025-03-10')
 

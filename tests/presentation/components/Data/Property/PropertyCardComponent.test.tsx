@@ -10,7 +10,7 @@ const baseProps = {
 }
 
 describe('PropertyCardComponent', () => {
-  it('renders the property information', () => {
+  it('should render the property information', () => {
     render(<PropertyCardComponent {...baseProps} />)
 
     expect(screen.getByRole('img', { name: baseProps.name })).toHaveAttribute(
@@ -22,7 +22,7 @@ describe('PropertyCardComponent', () => {
     expect(screen.getByText(baseProps.location)).toBeInTheDocument()
   })
 
-  it('renders optional actions when provided', () => {
+  it('should render optional actions when provided', () => {
     render(
       <PropertyCardComponent
         {...baseProps}
@@ -33,7 +33,7 @@ describe('PropertyCardComponent', () => {
     expect(screen.getByRole('button', { name: 'Book now' })).toBeInTheDocument()
   })
 
-  it('hides actions section when no actions are provided', () => {
+  it('should hide actions section when no actions are provided', () => {
     render(<PropertyCardComponent {...baseProps} actions={undefined} />)
 
     expect(

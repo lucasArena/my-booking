@@ -17,7 +17,7 @@ describe('ApplicationProviderComponent', () => {
     layoutMock.mockClear()
   })
 
-  it('wraps children with the application providers', () => {
+  it('should wrap children with the application providers', () => {
     render(
       <ApplicationProviderComponent>
         <span>App content</span>

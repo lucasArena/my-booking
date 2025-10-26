@@ -6,15 +6,17 @@ import type { INoDataStateComponentProps } from '@/presentation/components/Feedb
 export const NoDataStateComponent: FC<INoDataStateComponentProps> = ({
   message,
   cta,
+  messageStyle,
 }) => {
   return (
     <Box width="100%" py={6} display="flex" justifyContent="center">
       <Stack spacing={2} alignItems="center">
-        <InboxOutlinedIcon color="disabled" sx={{ fontSize: 48 }} />
+        <InboxOutlinedIcon color="disabled" sx={{ fontSize: 124 }} />
         <Typography
           variant="subtitle1"
           color="text.secondary"
-          textAlign="center">
+          textAlign="center"
+          sx={messageStyle}>
           {message}
         </Typography>
 

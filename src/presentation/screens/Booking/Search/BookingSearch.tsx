@@ -15,6 +15,7 @@ export const BookingScreen: React.FC = () => {
     handleOpenBookingDrawer,
     handleRangeChange,
     isEmpty,
+    emptyMessage,
     selectedProperty,
     selectedRange,
   } = useBookingSearch()
@@ -22,7 +23,7 @@ export const BookingScreen: React.FC = () => {
   return (
     <Box px={{ xs: 2, md: 4 }} py={{ xs: 2, md: 4 }}>
       <Typography variant="h4" gutterBottom>
-        Booking search
+        Find your perfect stay
       </Typography>
 
       <Box
@@ -39,7 +40,7 @@ export const BookingScreen: React.FC = () => {
             top: { md: 24 },
           }}>
           <Typography variant="h6" gutterBottom>
-            Filters
+            Check in & Check out
           </Typography>
 
           <Stack spacing={2}>
@@ -53,7 +54,7 @@ export const BookingScreen: React.FC = () => {
           </Stack>
         </Paper>
 
-        {isEmpty && <NoDataStateComponent message="No properties to show." />}
+        {isEmpty && <NoDataStateComponent message={emptyMessage} />}
 
         <Stack spacing={3}>
           {data.map(property => (

@@ -34,7 +34,7 @@ export const useMyBookingsScreen = () => {
   const isEmpty = safeData.length === 0
 
   const handleNavigateToBooking = () => {
-    navigate('/booking-search')
+    navigate('/')
   }
 
   const handleSelectBooking = useCallback(

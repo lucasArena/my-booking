@@ -90,11 +90,9 @@ Aliases configured in `vite.config.ts` allow concise imports such as `@/presenta
 
 ## Core Features
 
-1. **Hero-driven Home page** – marketing landing with date-range entry that routes users into the booking search flow.
-2. **Booking search** – sticky filter panel powered by the date range field, property cards sourced from the context API, and a confirmation drawer for finalizing bookings.
-3. **My Bookings dashboard** – lists aggregated reservations grouped by property, supports cancellation and date changes, and adapts drawer placement for mobile vs. desktop breakpoints.
-4. **Context-managed state** – `PropertyProviderComponent` stores property inventory, handles booking mutations, and exposes availability queries with date-overlap validation.
-5. **Accessible UI & feedback** – Material UI theming, responsive layout container, and toast notifications ready for integration with async workflows.
+1. **Booking search** – sticky filter panel powered by the date range field, property cards sourced from the context API, and a confirmation drawer for finalizing bookings.
+2. **My Bookings dashboard** – lists aggregated reservations grouped by property, supports cancellation and date changes, and adapts drawer placement for mobile vs. desktop breakpoints.
+3. **Context-managed state** – `PropertyProviderComponent` stores property inventory, handles booking mutations, and exposes availability queries with date-overlap validation.
 
 ## Testing Strategy
 
