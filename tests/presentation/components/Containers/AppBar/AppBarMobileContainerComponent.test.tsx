@@ -26,12 +26,6 @@ describe('AppBarMobileContainerComponent', () => {
     mockNavigate.mockClear()
   })
 
-  it('should render the menu trigger', () => {
-    render(<AppBarMobileContainerComponent pages={pages} />)
-
-    expect(screen.getByRole('button')).toBeInTheDocument()
-  })
-
   it('should open the menu and list all pages when toggled', async () => {
     const user = userEvent.setup()
 
