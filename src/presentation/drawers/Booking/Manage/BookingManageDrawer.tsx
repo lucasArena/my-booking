@@ -1,5 +1,13 @@
 import React from 'react'
-import { Box, Button, Divider, Drawer, Stack, Typography } from '@mui/material'
+import {
+  Alert,
+  Box,
+  Button,
+  Divider,
+  Drawer,
+  Stack,
+  Typography,
+} from '@mui/material'
 import type { IBookingManageDrawerProps } from '@/presentation/drawers/Booking/Manage/BookingManageDrawer.types'
 import { useBookingManageDrawer } from '@/presentation/drawers/Booking/Manage/BookingManageDrawer.rules'
 import { InputCalendarRangeComponent } from '@/presentation/components/Inputs/CalendarRange/InputCalendarRangeComponent'
@@ -10,6 +18,7 @@ export const BookingManageDrawer: React.FC<IBookingManageDrawerProps> = ({
   ...props
 }) => {
   const {
+    errorMessage,
     selectedRange,
     disabledDates,
     handleClose,
@@ -46,6 +55,8 @@ export const BookingManageDrawer: React.FC<IBookingManageDrawerProps> = ({
         <Divider />
 
         <Stack spacing={2}>
+          {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+
           <Typography variant="subtitle1" fontWeight={600}>
             Choose new stay dates
           </Typography>

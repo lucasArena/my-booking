@@ -18,6 +18,29 @@ export const useBookingManageDrawer = (props: IBookingManageDrawerProps) => {
   const propertyBookings = props.value?.property.bookings || []
   const booking = props.value?.booking
 
+  const handleError = () => {
+    const isOverlapping = propertyBookings
+      .filter(propertyBooking => propertyBooking.id !== booking?.id)
+      .some(propertyBooking => {
+        if (!selectedRange.checkIn || !selectedRange.checkOut) {
+          return false
+        }
+
+        return (
+          selectedRange.checkIn < propertyBooking.checkOut &&
+          selectedRange.checkOut > propertyBooking.checkIn
+        )
+      })
+
+    if (isOverlapping) {
+      return 'The selected date range overlaps with an existing booking.'
+    }
+
+    return null
+  }
+
+  const errorMessage = handleError()
+
   const disabledDates = propertyBookings
     .filter(propertyBooking => booking && propertyBooking.id !== booking.id)
     .flatMap(propertyBooking => {
@@ -40,7 +63,12 @@ export const useBookingManageDrawer = (props: IBookingManageDrawerProps) => {
   }, [])
 
   const handleConfirm = useCallback(() => {
-    if (!props.value || !selectedRange.checkIn || !selectedRange.checkOut) {
+    if (
+      !props.value ||
+      !selectedRange.checkIn ||
+      !selectedRange.checkOut ||
+      errorMessage
+    ) {
       return
     }
 
@@ -77,6 +105,7 @@ export const useBookingManageDrawer = (props: IBookingManageDrawerProps) => {
   }, [isSuccess])
 
   return {
+    errorMessage,
     disabledDates,
     selectedRange,
     handleClose,
