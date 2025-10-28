@@ -73,6 +73,7 @@ export const DateRangeFieldComponent: React.FC<
         slotProps={{ paper: { sx: { mt: 1.5, borderRadius: 3, p: 2 } } }}>
         <Stack spacing={2}>
           <InputCalendarRangeComponent
+            disabledPast
             initialRange={draftRange}
             onRangeChange={handleRangeChange}
             disabledDates={props.disabledDates}

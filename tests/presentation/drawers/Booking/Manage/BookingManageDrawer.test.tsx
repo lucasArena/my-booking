@@ -93,7 +93,7 @@ const createBaseProps = (
 ): IBookingManageDrawerProps => ({
   anchor: 'bottom',
   keepMounted: true,
-  onCallback: vi.fn(),
+  onSuccessCallback: vi.fn(),
   onClose: vi.fn(),
   value: null,
   ...overrides,
@@ -144,7 +144,10 @@ describe('BookingManageDrawer', () => {
     expect(calendarMock).not.toHaveBeenCalled()
     expect(formatRangeLabelMock).not.toHaveBeenCalled()
     expect(useBookingManageDrawerMock).toHaveBeenCalledWith(
-      expect.objectContaining({ value: null, onCallback: props.onCallback }),
+      expect.objectContaining({
+        value: null,
+        onCallback: props.onSuccessCallback,
+      }),
     )
   })
 
@@ -171,7 +174,11 @@ describe('BookingManageDrawer', () => {
 
     formatRangeLabelMock.mockReturnValue('01 Aug 2025 – 05 Aug 2025')
 
-    const props = createBaseProps({ value, onCallback, onClose })
+    const props = createBaseProps({
+      value,
+      onSuccessCallback: onCallback,
+      onClose,
+    })
 
     const user = userEvent.setup()
 

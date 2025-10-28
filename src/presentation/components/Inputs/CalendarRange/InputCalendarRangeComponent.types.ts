@@ -9,6 +9,8 @@ export interface IRangeDaysProps {
 }
 
 export interface IInputCalendarRangeComponentProps {
+  disabledPast?: boolean
+  disabled?: boolean
   initialRange?: TBookingRange
   disabledDates?: Date[]
   onRangeChange?: (range: TBookingRange) => void

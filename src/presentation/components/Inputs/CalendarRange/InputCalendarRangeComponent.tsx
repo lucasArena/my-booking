@@ -13,7 +13,9 @@ export const InputCalendarRangeComponent: React.FC<
 
   return (
     <StaticDatePicker
+      disabled={props.disabled}
       displayStaticWrapperAs="desktop"
+      disablePast={props.disabledPast}
       slotProps={{ actionBar: { actions: [] } }}
       value={pickerValue}
       onChange={handleDateChange}

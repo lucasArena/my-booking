@@ -1,7 +1,8 @@
 export interface IBooking {
   id: number
-  checkIn: Date
-  checkOut: Date
+  propertyId: number
+  checkIn: string
+  checkOut: string
 }
 
 export type TBookingRange = {

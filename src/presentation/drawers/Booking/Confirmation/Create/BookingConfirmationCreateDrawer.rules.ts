@@ -1,14 +1,14 @@
-import { useMakeBooking } from '@/presentation/hooks/UseBooking/UseMakeBooking'
-import type { IBookingConfirmationDrawerProps } from '@/presentation/drawers/Booking/Confirmation/BookingConfirmationDrawer.types'
+import { useBookingCreate } from '@/presentation/hooks/UseBooking/UseBookingCreate'
+import type { IBookingConfirmationCreateDrawerProps } from '@/presentation/drawers/Booking/Confirmation/Create/BookingConfirmationCreateDrawer.types'
 import { format } from 'date-fns'
 import { useEffect } from 'react'
 
 const DATE_FORMAT = 'dd MMM yyyy'
 
-export const useBookingConfirmationDrawer = (
-  props: IBookingConfirmationDrawerProps,
+export const useBookingConfirmationCreateDrawer = (
+  props: IBookingConfirmationCreateDrawerProps,
 ) => {
-  const { isSuccess, handleFetch } = useMakeBooking()
+  const { isSuccess, isLoading, handleFetch } = useBookingCreate()
   const hasRange = Boolean(
     props.selectedRange?.checkIn && props.selectedRange?.checkOut,
   )
@@ -27,10 +27,16 @@ export const useBookingConfirmationDrawer = (
       return
     }
 
+    console.log({
+      propertyId: props.property.id,
+      checkIn: format(props.selectedRange.checkIn, 'yyyy-MM-dd'),
+      checkOut: format(props.selectedRange.checkOut, 'yyyy-MM-dd'),
+    })
+
     handleFetch({
       propertyId: props.property.id,
-      checkIn: props.selectedRange.checkIn,
-      checkOut: props.selectedRange.checkOut,
+      checkIn: format(props.selectedRange.checkIn, 'yyyy-MM-dd'),
+      checkOut: format(props.selectedRange.checkOut, 'yyyy-MM-dd'),
     })
   }
 
@@ -42,5 +48,5 @@ export const useBookingConfirmationDrawer = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess])
 
-  return { stayLabel, handleConfirm }
+  return { stayLabel, isLoading, handleConfirm }
 }

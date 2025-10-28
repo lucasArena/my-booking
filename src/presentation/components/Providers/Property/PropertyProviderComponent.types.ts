@@ -1,4 +1,4 @@
-import type { IProperty } from '@/domain/entities/Property/Property.types'
+import type { IPropertyBooking } from '@/domain/entities/Property/PropertyBooking.types'
 
 export interface IGetPropertyAvailableByDatesParams {
   checkIn: Date
@@ -24,12 +24,8 @@ export interface IUpdateBookingParams {
 }
 
 export interface IPropertyContext {
-  properties: IProperty[]
-  updateBooking: (params: IUpdateBookingParams) => void
-  cancelBooking: (params: ICancelBookingParams) => void
-  getPropertyAvailableByDates: (
-    params: IGetPropertyAvailableByDatesParams,
-  ) => IProperty[]
-  getMyBookedProperties: (_: void) => IProperty[]
-  makeBooking: (params: IMakeBookingParams) => void
+  isLoading: boolean
+  myBookings: IPropertyBooking[]
+  error: string
+  handleGetMyBookedProperties: VoidFunction
 }

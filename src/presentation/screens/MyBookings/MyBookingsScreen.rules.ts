@@ -1,84 +1,53 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
-import type {
-  IPropertyBooking,
-  TBookingRange,
-} from '@/presentation/screens/MyBookings/MyBookingsScreen.types'
-import { useGetMyBookings } from '@/presentation/hooks/UseBooking/UseGetMyBookings'
-import { useCancelBooking } from '@/presentation/hooks/UseBooking/UseCancelBooking'
+import type { IPropertyBookingSelection } from '@/presentation/screens/MyBookings/MyBookingsScreen.types'
+
 import { useNavigate } from 'react-router-dom'
-
-const EMPTY_RANGE: TBookingRange = { checkIn: null, checkOut: null }
-
-const ensureRange = (range?: TBookingRange): TBookingRange =>
-  range
-    ? {
-        checkIn: range.checkIn ?? null,
-        checkOut: range.checkOut ?? null,
-      }
-    : { ...EMPTY_RANGE }
+import type { IPropertyBooking } from '@/domain/entities/Property/PropertyBooking.types'
+import { usePropertyContext } from '@/presentation/hooks/UseContext/UsePropertyContext'
 
 export const useMyBookingsScreen = () => {
   const [selectedBooking, setSelectedBooking] =
-    useState<IPropertyBooking | null>(null)
+    useState<IPropertyBookingSelection | null>(null)
+
+  const [bookingToCancel, setBookingToCancel] = useState<number | null>(null)
 
   const navigate = useNavigate()
 
-  const { data, handleFetch } = useGetMyBookings()
+  const { myBookings, isLoading, error, handleGetMyBookedProperties } =
+    usePropertyContext()
 
-  const { handleFetch: handleCancelFetch, isSuccess: isSuccessCancel } =
-    useCancelBooking()
-
-  const safeData = useMemo(() => data ?? [], [data])
-
-  const isEmpty = safeData.length === 0
+  const safeData = myBookings ?? []
 
   const handleNavigateToBooking = () => {
     navigate('/')
   }
 
-  const handleSelectBooking = useCallback(
-    (propertyId: number, bookingId: number) => {
-      const selectedProperty = safeData.find(item => item.id === propertyId)
+  const handleSelectBooking = (
+    bookingIdSelected: number,
+    propertyBookingSelected: IPropertyBooking,
+  ) => {
+    setSelectedBooking({
+      propertyBooking: propertyBookingSelected,
+      bookingId: bookingIdSelected,
+    })
+  }
 
-      if (!selectedProperty) {
-        return
-      }
+  const handleCloseCancelDialog = useCallback(() => {
+    setBookingToCancel(null)
+  }, [])
 
-      setSelectedBooking({
-        property: selectedProperty,
-        booking: selectedProperty.bookings.find(item => item.id === bookingId)!,
-      })
-    },
-    [safeData],
-  )
-
-  const handleCloseDrawer = useCallback(() => {
+  const handleCloseManageDrawer = () => {
     setSelectedBooking(null)
-  }, [])
+  }
 
-  const handleRangeChange = useCallback((range: TBookingRange) => {
-    const normalizedRange = ensureRange(range)
-
-    setSelectedBooking(previous =>
-      previous ? { ...previous, range: normalizedRange } : previous,
-    )
-  }, [])
-
-  const handleClickCancelBooking = (propertyId: number, bookingId: number) => {
-    handleCancelFetch({ propertyId, bookingId })
+  const handleClickCancelBooking = (bookingId: number) => {
+    setBookingToCancel(bookingId)
   }
 
   const handleLoadData = () => {
-    handleFetch()
+    handleGetMyBookedProperties()
   }
-
-  useEffect(() => {
-    if (isSuccessCancel) {
-      handleLoadData()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuccessCancel])
 
   useEffect(() => {
     handleLoadData()
@@ -87,13 +56,15 @@ export const useMyBookingsScreen = () => {
 
   return {
     bookings: safeData,
+    isLoading,
+    error,
+    bookingToCancel,
     handleClickCancelBooking,
-    handleCloseDrawer,
+    handleCloseManageDrawer,
+    handleCloseCancelDialog,
     handleLoadData,
     handleNavigateToBooking,
-    handleRangeChange,
     handleSelectBooking,
-    isEmpty,
     selectedBooking,
   }
 }

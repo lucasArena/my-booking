@@ -7,6 +7,7 @@ import {
   Drawer,
   Stack,
   Typography,
+  useMediaQuery,
 } from '@mui/material'
 import type { IBookingManageDrawerProps } from '@/presentation/drawers/Booking/Manage/BookingManageDrawer.types'
 import { useBookingManageDrawer } from '@/presentation/drawers/Booking/Manage/BookingManageDrawer.rules'
@@ -14,41 +15,46 @@ import { InputCalendarRangeComponent } from '@/presentation/components/Inputs/Ca
 import { FormatRangeLabelUtil } from '@/application/utils/FormatRangeLabel/FormatRangeLabelUtil'
 
 export const BookingManageDrawer: React.FC<IBookingManageDrawerProps> = ({
-  onCallback,
+  onSuccessCallback: onCallback,
   ...props
 }) => {
   const {
+    propertyBooking,
+    bookingSelected,
     errorMessage,
     selectedRange,
     disabledDates,
+    isLoading,
     handleClose,
     handleRangeChange,
     handleConfirm,
-  } = useBookingManageDrawer({ onCallback, ...props })
+  } = useBookingManageDrawer({ onSuccessCallback: onCallback, ...props })
+
+  const isMobile = useMediaQuery('(max-width:768px)')
+
+  const anchor = isMobile ? 'bottom' : 'right'
 
   const { value, ...drawerProps } = props
 
-  if (!value) {
-    return <Drawer {...drawerProps} open={false} />
+  if (!propertyBooking) {
+    return
   }
 
-  const { property } = value
-
   return (
-    <Drawer {...drawerProps} open={!!value}>
+    <Drawer {...drawerProps} variant="temporary" open={!!value} anchor={anchor}>
       <Stack spacing={3} px={3} py={4} role="presentation">
         <Box>
           <Typography variant="overline" color="text.secondary">
             Update your stay
           </Typography>
           <Typography variant="h5" fontWeight={600} mt={0.5} gutterBottom>
-            {property.name}
+            {propertyBooking.name}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {property.location}
+            {propertyBooking.location}
           </Typography>
           <Typography variant="body2" color="text.secondary" mt={1.5}>
-            {property.description}
+            {propertyBooking.description}
           </Typography>
         </Box>
 
@@ -64,6 +70,8 @@ export const BookingManageDrawer: React.FC<IBookingManageDrawerProps> = ({
             {FormatRangeLabelUtil(selectedRange, 'Select a new stay range')}
           </Typography>
           <InputCalendarRangeComponent
+            disabled={isLoading}
+            disabledPast
             disabledDates={disabledDates}
             initialRange={{
               checkIn: selectedRange.checkIn,
@@ -77,14 +85,23 @@ export const BookingManageDrawer: React.FC<IBookingManageDrawerProps> = ({
         <Divider />
 
         <Stack direction="row" spacing={2}>
-          <Button fullWidth variant="outlined" onClick={handleClose}>
+          <Button
+            fullWidth
+            variant="outlined"
+            disabled={isLoading}
+            onClick={handleClose}>
             Close
           </Button>
           <Button
             fullWidth
             variant="contained"
-            onClick={handleConfirm}
-            disabled={!value.booking.checkIn || !value.booking.checkOut}>
+            disabled={
+              isLoading ||
+              !bookingSelected?.checkIn ||
+              !bookingSelected?.checkOut
+            }
+            loading={isLoading}
+            onClick={handleConfirm}>
             Edit
           </Button>
         </Stack>

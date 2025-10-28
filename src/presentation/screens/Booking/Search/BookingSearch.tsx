@@ -1,22 +1,24 @@
-import { Box, Button, Paper, Stack, Typography } from '@mui/material'
+import { Box, Button, Icon, Paper, Stack, Typography } from '@mui/material'
 import React from 'react'
 
 import { PropertyCardComponent } from '@/presentation/components/Data/Property/Card/PropertyCardComponent'
-import { BookingDrawer } from '@/presentation/drawers/Booking/Confirmation/BookingConfirmationDrawer'
+import { BookingConfirmationCreateDrawer } from '@/presentation/drawers/Booking/Confirmation/Create/BookingConfirmationCreateDrawer'
 import { useBookingSearch } from '@/presentation/screens/Booking/Search/BookingSearch.rules'
 import { DateRangeFieldComponent } from '@/presentation/components/Inputs/DateRange/InputDateRangeFieldComponent'
-import { NoDataStateComponent } from '@/presentation/components/Feedback/NoData/NoDataStateComponent'
+import { MessageComponent } from '@/presentation/components/Feedback/Message/MessageComponent'
+import { ListContainerComponent } from '@/presentation/components/Containers/List/ListContainerComponent'
+import { PropertyCardSkeletonComponent } from '@/presentation/components/Data/Property/Card/PropertyCardComponent.skeleton'
 
 export const BookingScreen: React.FC = () => {
   const {
     data,
-    emptyMessage,
+    isLoading,
     errorMessage,
     handleCloseBookingDrawer,
     handleConfirmBooking,
     handleOpenBookingDrawer,
     handleRangeChange,
-    isEmpty,
+    handleBootstrap,
     selectedProperty,
     selectedRange,
   } = useBookingSearch()
@@ -55,28 +57,57 @@ export const BookingScreen: React.FC = () => {
           </Stack>
         </Paper>
 
-        {!!errorMessage && <NoDataStateComponent message={errorMessage} />}
-        {isEmpty && <NoDataStateComponent message={emptyMessage} />}
-
         <Stack spacing={3}>
-          {data.map(property => (
-            <Box key={property.id}>
+          <ListContainerComponent
+            isLoading={isLoading}
+            isError={!!errorMessage}
+            data={data}
+            renderLoading={() =>
+              Array.from({ length: 3 }).map((_, index) => (
+                <PropertyCardSkeletonComponent key={index} />
+              ))
+            }
+            renderEmpty={() => (
+              <MessageComponent
+                message={
+                  !selectedRange.checkIn && !selectedRange.checkOut
+                    ? 'Select check-in and check-out dates to see available properties.'
+                    : 'No available properties for the selected dates.'
+                }
+              />
+            )}
+            renderError={() => (
+              <MessageComponent
+                Icon={
+                  <Icon color="error" sx={{ fontSize: 124 }}>
+                    highlight_off
+                  </Icon>
+                }
+                message={errorMessage}
+                cta={
+                  <Button variant="contained" onClick={() => handleBootstrap()}>
+                    Retry
+                  </Button>
+                }
+              />
+            )}
+            renderItem={item => (
               <PropertyCardComponent
-                {...property}
+                {...item}
                 actions={
                   <Button
                     variant="contained"
-                    onClick={() => handleOpenBookingDrawer(property)}>
+                    onClick={() => handleOpenBookingDrawer(item)}>
                     Book Now
                   </Button>
                 }
               />
-            </Box>
-          ))}
+            )}
+          />
         </Stack>
       </Box>
 
-      <BookingDrawer
+      <BookingConfirmationCreateDrawer
         anchor="bottom"
         onClose={handleCloseBookingDrawer}
         onCancel={handleCloseBookingDrawer}

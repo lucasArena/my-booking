@@ -1,17 +1,17 @@
 import React from 'react'
 import { Box, Button, Divider, Drawer, Stack, Typography } from '@mui/material'
-import { Puller } from '@/presentation/drawers/Booking/Confirmation/BookingConfirmationDrawer.styles'
-import type { IBookingConfirmationDrawerProps } from '@/presentation/drawers/Booking/Confirmation/BookingConfirmationDrawer.types'
-import { useBookingConfirmationDrawer } from '@/presentation/drawers/Booking/Confirmation/BookingConfirmationDrawer.rules'
+import { Puller } from '@/presentation/drawers/Booking/Confirmation/Create/BookingConfirmationCreateDrawer.styles'
+import type { IBookingConfirmationCreateDrawerProps } from '@/presentation/drawers/Booking/Confirmation/Create/BookingConfirmationCreateDrawer.types'
+import { useBookingConfirmationCreateDrawer } from '@/presentation/drawers/Booking/Confirmation/Create/BookingConfirmationCreateDrawer.rules'
 
-export const BookingDrawer: React.FC<IBookingConfirmationDrawerProps> = ({
-  selectedRange,
-  ...props
-}) => {
-  const { stayLabel, handleConfirm } = useBookingConfirmationDrawer({
-    selectedRange,
-    ...props,
-  })
+export const BookingConfirmationCreateDrawer: React.FC<
+  IBookingConfirmationCreateDrawerProps
+> = ({ selectedRange, ...props }) => {
+  const { stayLabel, isLoading, handleConfirm } =
+    useBookingConfirmationCreateDrawer({
+      selectedRange,
+      ...props,
+    })
 
   const { property, onCancel, ...drawerProps } = props
 
@@ -54,11 +54,17 @@ export const BookingDrawer: React.FC<IBookingConfirmationDrawerProps> = ({
             fullWidth
             variant="outlined"
             color="inherit"
+            disabled={isLoading}
             onClick={onCancel}>
             Cancel
           </Button>
 
-          <Button fullWidth variant="contained" onClick={() => handleConfirm()}>
+          <Button
+            fullWidth
+            variant="contained"
+            loading={isLoading}
+            disabled={isLoading}
+            onClick={() => handleConfirm()}>
             Confirm
           </Button>
         </Stack>

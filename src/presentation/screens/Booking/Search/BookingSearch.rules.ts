@@ -1,8 +1,8 @@
-import { ParseDateLocalUtil } from '@/application/utils/ParseDateLocalUtil'
+import { ParseDateLocalUtil } from '@/application/utils/ParseDateLocalUtil/ParseDateLocalUtil'
 import type { TBookingRange } from '@/domain/entities/Booking/Booking.types'
 import type { IProperty } from '@/domain/entities/Property/Property.types'
-import { useGetAvailableBooking } from '@/presentation/hooks/UseProperty/UseGetAvailableProperties'
-import { isValid } from 'date-fns'
+import { usePropertyGetAvailable } from '@/presentation/hooks/UseProperty/UsePropertyGetAvailable'
+import { formatDate, isValid } from 'date-fns'
 import { useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -10,7 +10,8 @@ export const useBookingSearch = () => {
   const location = useLocation()
   const navigate = useNavigate()
 
-  const { data, handleFetch, handleResetState } = useGetAvailableBooking()
+  const { data, error, isLoading, handleFetch, handleResetState } =
+    usePropertyGetAvailable()
 
   const selectedRange = useMemo(
     () => ({
@@ -27,8 +28,12 @@ export const useBookingSearch = () => {
   const safeData = data ?? []
 
   const handleError = () => {
+    if (error) {
+      return error
+    }
+
     if (!selectedRange.checkIn || !selectedRange.checkOut) {
-      return null
+      return ''
     }
 
     const isCheckinGreaterThanCheckout =
@@ -37,16 +42,11 @@ export const useBookingSearch = () => {
     if (isCheckinGreaterThanCheckout) {
       return 'Check-in date must be before check-out date.'
     }
+
+    return ''
   }
 
   const errorMessage = handleError()
-
-  const isEmpty = !errorMessage && safeData.length === 0
-
-  const emptyMessage =
-    isEmpty && !selectedRange.checkIn && !selectedRange.checkOut
-      ? 'Select check-in and check-out dates to see available properties.'
-      : 'No available properties for the selected dates.'
 
   const [selectedProperty, setSelectedProperty] = useState<IProperty | null>(
     null,
@@ -81,26 +81,32 @@ export const useBookingSearch = () => {
     navigate(`?checkin=${checkin}&checkout=${checkout}`)
   }
 
-  useEffect(() => {
-    if (!errorMessage && selectedRange.checkIn && selectedRange.checkOut) {
-      handleFetch({
-        checkIn: selectedRange.checkIn,
-        checkOut: selectedRange.checkOut,
-      })
+  const handleBootstrap = () => {
+    if (!selectedRange.checkIn || !selectedRange.checkOut) {
+      return
     }
+
+    handleFetch({
+      checkIn: formatDate(selectedRange.checkIn, 'yyyy-MM-dd'),
+      checkOut: formatDate(selectedRange.checkOut, 'yyyy-MM-dd'),
+    })
+  }
+
+  useEffect(() => {
+    handleBootstrap()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedRange])
 
   return {
     data: safeData,
-    emptyMessage,
     errorMessage,
+    isLoading,
     handleCloseBookingDrawer,
     handleConfirmBooking,
     handleFetch,
+    handleBootstrap,
     handleOpenBookingDrawer,
     handleRangeChange,
-    isEmpty,
     selectedProperty,
     selectedRange,
   }

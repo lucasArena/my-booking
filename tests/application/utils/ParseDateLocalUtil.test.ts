@@ -1,4 +1,4 @@
-import { ParseDateLocalUtil } from '@/application/utils/ParseDateLocalUtil'
+import { ParseDateLocalUtil } from '@/application/utils/ParseDateLocalUtil/ParseDateLocalUtil'
 
 describe('ParseDateLocalUtil', () => {
   it('should return null when the value is null or empty', () => {
