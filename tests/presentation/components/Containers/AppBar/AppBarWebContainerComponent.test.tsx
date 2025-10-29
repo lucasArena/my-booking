@@ -37,8 +37,8 @@ describe('AppBarWebContainerComponent', () => {
 
     const bookNowButton = screen.getByRole('button', { name: pages[0].label })
 
-    expect(bookNowButton).toBeInTheDocument()
-    expect(bookNowButton).toHaveAttribute('data-active', 'true')
+    expect(bookNowButton).toBeTruthy()
+    expect(bookNowButton.getAttribute('data-active')).toBe('true')
   })
 
   it('should navigate when a page button is clicked', async () => {

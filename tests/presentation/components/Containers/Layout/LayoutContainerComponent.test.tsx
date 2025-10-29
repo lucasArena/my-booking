@@ -74,17 +74,18 @@ describe('LayoutContainerComponent', () => {
       </LayoutContainerComponent>,
     )
 
-    expect(screen.getByTestId('mobile-app-bar')).toHaveTextContent(
-      'My bookings',
-    )
-    expect(screen.queryByTestId('web-app-bar')).not.toBeInTheDocument()
+    const mobileAppBar = screen.getByTestId('mobile-app-bar')
+
+    expect(mobileAppBar).toBeTruthy()
+    expect(mobileAppBar.textContent ?? '').toContain('My bookings')
+    expect(screen.queryByTestId('web-app-bar')).toBeNull()
     const pages = extractPages(mobileAppBarMock)
     expect(pages).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ label: 'My bookings', path: '/my-bookings' }),
       ]),
     )
-    expect(screen.getByText('Content')).toBeInTheDocument()
+    expect(screen.getByText('Content')).toBeTruthy()
   })
 
   it('should render the web app bar when the viewport is desktop', () => {
@@ -96,14 +97,17 @@ describe('LayoutContainerComponent', () => {
       </LayoutContainerComponent>,
     )
 
-    expect(screen.getByTestId('web-app-bar')).toHaveTextContent('My bookings')
-    expect(screen.queryByTestId('mobile-app-bar')).not.toBeInTheDocument()
+    const webAppBar = screen.getByTestId('web-app-bar')
+
+    expect(webAppBar).toBeTruthy()
+    expect(webAppBar.textContent ?? '').toContain('My bookings')
+    expect(screen.queryByTestId('mobile-app-bar')).toBeNull()
     const pages = extractPages(webAppBarMock)
     expect(pages).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ label: 'My bookings', path: '/my-bookings' }),
       ]),
     )
-    expect(screen.getByText('Other content')).toBeInTheDocument()
+    expect(screen.getByText('Other content')).toBeTruthy()
   })
 })

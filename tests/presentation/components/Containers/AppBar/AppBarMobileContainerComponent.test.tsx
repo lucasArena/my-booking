@@ -34,9 +34,11 @@ describe('AppBarMobileContainerComponent', () => {
     await user.click(screen.getByRole('button'))
 
     for (const page of pages) {
-      expect(
-        await screen.findByRole('menuitem', { name: page.label }),
-      ).toBeInTheDocument()
+      const menuItem = await screen.findByRole('menuitem', {
+        name: page.label,
+      })
+
+      expect(menuItem).toBeTruthy()
     }
   })
 

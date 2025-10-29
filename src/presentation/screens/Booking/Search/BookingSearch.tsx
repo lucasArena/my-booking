@@ -8,19 +8,22 @@ import { DateRangeFieldComponent } from '@/presentation/components/Inputs/DateRa
 import { MessageComponent } from '@/presentation/components/Feedback/Message/MessageComponent'
 import { ListContainerComponent } from '@/presentation/components/Containers/List/ListContainerComponent'
 import { PropertyCardSkeletonComponent } from '@/presentation/components/Data/Property/Card/PropertyCardComponent.skeleton'
+import { Controller } from 'react-hook-form'
 
 export const BookingScreen: React.FC = () => {
   const {
     data,
     isLoading,
     errorMessage,
+    control,
+    formValues,
+    isSuccess,
     handleCloseBookingDrawer,
     handleConfirmBooking,
     handleOpenBookingDrawer,
     handleRangeChange,
-    handleBootstrap,
+    handleRetry,
     selectedProperty,
-    selectedRange,
   } = useBookingSearch()
 
   return (
@@ -47,12 +50,19 @@ export const BookingScreen: React.FC = () => {
           </Typography>
 
           <Stack spacing={2}>
-            <DateRangeFieldComponent
-              onChange={handleRangeChange}
-              value={{
-                checkIn: selectedRange.checkIn,
-                checkOut: selectedRange.checkOut,
-              }}
+            <Controller
+              name="dateRange"
+              control={control}
+              render={({ field }) => (
+                <DateRangeFieldComponent
+                  onChange={value => {
+                    field.onChange(value)
+
+                    handleRangeChange(value)
+                  }}
+                  value={field.value}
+                />
+              )}
             />
           </Stack>
         </Paper>
@@ -70,7 +80,9 @@ export const BookingScreen: React.FC = () => {
             renderEmpty={() => (
               <MessageComponent
                 message={
-                  !selectedRange.checkIn && !selectedRange.checkOut
+                  !isSuccess ||
+                  formValues.dateRange.checkIn == null ||
+                  formValues.dateRange.checkOut == null
                     ? 'Select check-in and check-out dates to see available properties.'
                     : 'No available properties for the selected dates.'
                 }
@@ -85,7 +97,7 @@ export const BookingScreen: React.FC = () => {
                 }
                 message={errorMessage}
                 cta={
-                  <Button variant="contained" onClick={() => handleBootstrap()}>
+                  <Button variant="contained" onClick={() => handleRetry()}>
                     Retry
                   </Button>
                 }
@@ -114,14 +126,7 @@ export const BookingScreen: React.FC = () => {
         property={selectedProperty}
         open={!!selectedProperty}
         onSuccess={handleConfirmBooking}
-        selectedRange={
-          selectedRange.checkIn && selectedRange.checkOut
-            ? {
-                checkIn: selectedRange.checkIn,
-                checkOut: selectedRange.checkOut,
-              }
-            : null
-        }
+        selectedRange={formValues.dateRange}
       />
     </Box>
   )

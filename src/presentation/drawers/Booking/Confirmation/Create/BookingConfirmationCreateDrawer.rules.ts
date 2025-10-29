@@ -15,7 +15,7 @@ export const useBookingConfirmationCreateDrawer = (
 
   const stayLabel =
     hasRange && props.selectedRange
-      ? `${format(props.selectedRange.checkIn, DATE_FORMAT)} – ${format(props.selectedRange.checkOut, DATE_FORMAT)}`
+      ? `${format(props.selectedRange.checkIn!, DATE_FORMAT)} – ${format(props.selectedRange.checkIn!, DATE_FORMAT)}`
       : 'Select your stay range'
 
   const handleConfirm = () => {
@@ -26,12 +26,6 @@ export const useBookingConfirmationCreateDrawer = (
     ) {
       return
     }
-
-    console.log({
-      propertyId: props.property.id,
-      checkIn: format(props.selectedRange.checkIn, 'yyyy-MM-dd'),
-      checkOut: format(props.selectedRange.checkOut, 'yyyy-MM-dd'),
-    })
 
     handleFetch({
       propertyId: props.property.id,

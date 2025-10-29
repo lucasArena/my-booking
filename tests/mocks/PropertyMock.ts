@@ -8,7 +8,6 @@ export const PropertyMock: IProperty = {
     'Contemporary loft with floor-to-ceiling windows, dedicated workspace, and concierge amenities.',
   location: 'Midtown, New York, NY',
   price: '285',
-  bookings: [],
 }
 
 export const PropertiesMock: IProperty[] = [
@@ -20,7 +19,6 @@ export const PropertiesMock: IProperty[] = [
       'Contemporary loft with floor-to-ceiling windows, dedicated workspace, and concierge amenities.',
     location: 'Midtown, New York, NY',
     price: '285',
-    bookings: [],
   },
   {
     id: 202,
@@ -30,7 +28,6 @@ export const PropertiesMock: IProperty[] = [
       'Oceanfront villa with private plunge pool, chef-grade kitchen, and fire pit lounge.',
     location: 'Malibu, California',
     price: '620',
-    bookings: [],
   },
   {
     id: 303,
@@ -40,7 +37,6 @@ export const PropertiesMock: IProperty[] = [
       'Ski-in chalet with sauna, wrap-around balcony, and heated gear storage.',
     location: 'Aspen, Colorado',
     price: '410',
-    bookings: [],
   },
   {
     id: 404,
@@ -50,6 +46,5 @@ export const PropertiesMock: IProperty[] = [
       'Cozy studio with smart-home automation, balcony city views, and on-site gym.',
     location: 'River North, Chicago, IL',
     price: '195',
-    bookings: [],
   },
 ]

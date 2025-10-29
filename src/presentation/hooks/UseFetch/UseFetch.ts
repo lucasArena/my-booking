@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import type { IClient } from '@/domain/application/Client.types'
+import type { IFetch } from '@/presentation/hooks/UseFetch/UseFetch.types'
 
 export const useFetch = <TRequest, TResponse>(
-  client: IClient<TRequest, Promise<TResponse>>,
+  client: IFetch<TRequest, Promise<TResponse>>,
 ) => {
   const [data, setData] = useState<TResponse | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)

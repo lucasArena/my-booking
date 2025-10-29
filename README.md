@@ -1,6 +1,6 @@
 # My Booking
 
-My Booking is a React + TypeScript single-page application for browsing premium properties, booking new stays, and managing existing reservations through an intuitive drawer-driven workflow.
+My Booking is a React + TypeScript single-page application for browsing properties, booking new stays, and managing existing bookings.
 
 ## Getting Started
 
@@ -18,17 +18,19 @@ My Booking is a React + TypeScript single-page application for browsing premium 
    yarn install
    ```
 
-3. Launch the development server:
+3. Run mock server:
+
+   ```bash
+   yarn server
+   ```
+
+4. Launch the development server:
 
    ```bash
    yarn dev
    ```
 
-4. Navigate to `http://localhost:5173` (default Vite port) to explore the app.
-
-### Environment
-
-The project boots with mock property data located in `tests/mocks/Property.mock.ts`. Replace this source or connect real APIs inside the `PropertyProviderComponent` when integrating with a backend.
+5. Navigate to `http://localhost:5173` (default Vite port) to explore the app.
 
 ## Available Scripts
 
@@ -41,13 +43,6 @@ The project boots with mock property data located in `tests/mocks/Property.mock.
 | `yarn test`    | Start Vitest in watch mode.                                |
 | `yarn cy:run`  | Execute the Cypress end-to-end suite in headless mode.     |
 
-## Highlights
-
-- **Curated stay discovery** – explore featured properties, filter them by stay dates, and launch booking flows without leaving the page.
-- **In-place booking confirmation** – review property details, validate selected nights, and confirm the stay from a responsive confirmation drawer.
-- **Self-service booking management** – list upcoming reservations, reschedule stays, or cancel directly in the My Bookings screen using a dedicated management drawer.
-- **Reusable design system** – component library based on Material UI, custom hooks, and layered modules that separate domain entities, application utilities, and presentation concerns.
-
 ## Tech Stack
 
 - **Framework:** React 19 + TypeScript
@@ -56,13 +51,14 @@ The project boots with mock property data located in `tests/mocks/Property.mock.
 - **Date handling:** date-fns & MUI X Date Pickers
 - **Routing:** React Router DOM 7
 - **Notifications:** React Toastify
-- **State & utilities:** Custom context providers (`Application`, `Property`) and helper utilities in `/src/application/utils`
+- **State & utilities:** Custom context providers (`Application`, `Property`)
 - **Testing:** Vitest 2 with React Testing Library and user-event and Cypress
 
 ## Architecture Overview
 
 The project follows a lightweight hexagonal-inspired structure that keeps UI, domain models, and orchestration logic isolated:
 
+- `server` - Folder for all the mock server structure
 - `cypress` - Folder for end to end tests
 - `src/domain` – strongly typed entities and DTO contracts (`Property`, `Booking`, `Client`).
 - `src/application` – cross-cutting utilities (date formatting, random IDs, overlap validation) and the routing configuration.
@@ -76,12 +72,15 @@ The project follows a lightweight hexagonal-inspired structure that keeps UI, do
 ### Directory Snapshot
 
 ```text
+server/
 cypress/
   e2e/
 src/
   application/
   domain/
+  infra/
   presentation/
+  services/
 tests/
   application/
   presentation/
@@ -92,7 +91,7 @@ Aliases configured in `vite.config.ts` allow concise imports such as `@/presenta
 
 ## Core Features
 
-1. **Booking search** – sticky filter panel powered by the date range field, property cards sourced from the context API, and a confirmation drawer for finalizing bookings.
+1. **Booking search** – sticky filter panel powered by the date range field, property cards sourced from the mock api using json-server.
 2. **My Bookings** – lists aggregated reservations grouped by property, supports cancellation and date changes, and adapts drawer placement for mobile vs. desktop breakpoints.
 3. **Context-managed state** – `PropertyProviderComponent` stores property inventory, handles booking mutations, and exposes availability queries with date-overlap validation.
 
@@ -112,13 +111,6 @@ Run the end-to-end Cypress flow (ensure the dev server is running on `http://loc
 ```bash
 yarn cy:run
 ```
-
-## Design Notes & Extensibility
-
-- Swap the mock property dataset for real API calls by adjusting the `PropertyProviderComponent.rules.ts` hooks.
-- Inject additional screens by extending `RoutesConfig` inside `src/application/routes/Routes.tsx`.
-- Style customisations live next to components (e.g., `.styles.ts` + `.rules.ts` pattern) to keep styling and logic modular.
-- Path aliases are defined in `tsconfig.app.json` and `vite.config.ts`; update both when introducing new top-level directories.
 
 ## Future Improvements
 

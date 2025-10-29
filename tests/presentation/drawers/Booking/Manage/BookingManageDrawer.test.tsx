@@ -6,8 +6,8 @@ import { vi, type Mock } from 'vitest'
 import type { TBookingRange } from '@/domain/entities/Booking/Booking.types'
 import { BookingManageDrawer } from '@/presentation/drawers/Booking/Manage/BookingManageDrawer'
 import type { IBookingManageDrawerProps } from '@/presentation/drawers/Booking/Manage/BookingManageDrawer.types'
-import type { IPropertyBooking } from '@/presentation/screens/MyBookings/MyBookingsScreen.types'
-import { PropertyMock } from '@/tests/mocks/Property.mock'
+import type { IPropertyBooking } from '@/domain/entities/Property/PropertyBooking.types'
+import { PropertyMock } from '@/tests/mocks/PropertyMock'
 
 type CalendarRangeProps = {
   initialRange: TBookingRange
@@ -108,14 +108,42 @@ const createSelectedRange = (
 })
 
 const createPropertyBooking = (): IPropertyBooking => ({
-  property: {
-    ...PropertyMock,
-  },
-  booking: {
-    id: 401,
-    checkIn: new Date('2025-07-01T00:00:00.000Z'),
-    checkOut: new Date('2025-07-05T00:00:00.000Z'),
-  },
+  ...PropertyMock,
+  bookings: [
+    {
+      id: 401,
+      propertyId: PropertyMock.id,
+      checkIn: '2025-07-01T00:00:00.000Z',
+      checkOut: '2025-07-05T00:00:00.000Z',
+    },
+  ],
+})
+
+type BookingManageDrawerRulesReturn = {
+  isLoading: boolean
+  propertyBooking: IPropertyBooking | null
+  bookingSelected: IPropertyBooking['bookings'][number] | null
+  errorMessage: string | null
+  disabledDates: Date[]
+  selectedRange: TBookingRange
+  handleClose: () => void
+  handleRangeChange: (range: TBookingRange) => void
+  handleConfirm: () => void
+}
+
+const createHookReturn = (
+  overrides: Partial<BookingManageDrawerRulesReturn> = {},
+): BookingManageDrawerRulesReturn => ({
+  isLoading: false,
+  propertyBooking: null,
+  bookingSelected: null,
+  errorMessage: null,
+  disabledDates: [],
+  selectedRange: createSelectedRange(),
+  handleClose: vi.fn(),
+  handleRangeChange: vi.fn(),
+  handleConfirm: vi.fn(),
+  ...overrides,
 })
 
 describe('BookingManageDrawer', () => {
@@ -130,23 +158,18 @@ describe('BookingManageDrawer', () => {
   it('should render an inactive drawer when no booking value is provided', () => {
     const props = createBaseProps({ value: null })
 
-    useBookingManageDrawerMock.mockReturnValue({
-      selectedRange: createSelectedRange(),
-      handleClose: vi.fn(),
-      handleRangeChange: vi.fn(),
-      handleConfirm: vi.fn(),
-    })
+    useBookingManageDrawerMock.mockReturnValue(createHookReturn())
 
     render(<BookingManageDrawer {...props} />)
 
-    expect(drawerMock).toHaveBeenCalledTimes(1)
-    expect(screen.getByTestId('drawer')).toHaveAttribute('data-open', 'false')
+    expect(drawerMock).not.toHaveBeenCalled()
+    expect(screen.queryByTestId('drawer')).toBeNull()
     expect(calendarMock).not.toHaveBeenCalled()
     expect(formatRangeLabelMock).not.toHaveBeenCalled()
     expect(useBookingManageDrawerMock).toHaveBeenCalledWith(
       expect.objectContaining({
         value: null,
-        onCallback: props.onSuccessCallback,
+        onSuccessCallback: props.onSuccessCallback,
       }),
     )
   })
@@ -163,14 +186,22 @@ describe('BookingManageDrawer', () => {
       checkOut: new Date('2025-08-05T00:00:00.000Z'),
     })
 
-    const value = createPropertyBooking()
+    const propertyBooking = createPropertyBooking()
+    const value = {
+      propertyBooking,
+      bookingId: propertyBooking.bookings[0].id,
+    }
 
-    useBookingManageDrawerMock.mockReturnValue({
-      selectedRange,
-      handleClose,
-      handleRangeChange,
-      handleConfirm,
-    })
+    useBookingManageDrawerMock.mockReturnValue(
+      createHookReturn({
+        propertyBooking,
+        bookingSelected: propertyBooking.bookings[0],
+        selectedRange,
+        handleClose,
+        handleRangeChange,
+        handleConfirm,
+      }),
+    )
 
     formatRangeLabelMock.mockReturnValue('01 Aug 2025 – 05 Aug 2025')
 
@@ -184,12 +215,17 @@ describe('BookingManageDrawer', () => {
 
     render(<BookingManageDrawer {...props} />)
 
-    expect(screen.getByText('Update your stay')).toBeInTheDocument()
-    expect(screen.getByText(value.property.name)).toBeInTheDocument()
-    expect(screen.getByText(value.property.location)).toBeInTheDocument()
-    expect(screen.getByText(value.property.description)).toBeInTheDocument()
-    expect(screen.getByText('01 Aug 2025 – 05 Aug 2025')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Edit' })).not.toBeDisabled()
+    expect(screen.getByText('Update your stay')).toBeTruthy()
+    expect(screen.getByText(propertyBooking.name)).toBeTruthy()
+    expect(screen.getByText(propertyBooking.location)).toBeTruthy()
+    expect(screen.getByText(propertyBooking.description)).toBeTruthy()
+    expect(screen.getByText('01 Aug 2025 – 05 Aug 2025')).toBeTruthy()
+
+    const editButton = screen.getByRole('button', {
+      name: 'Edit',
+    }) as HTMLButtonElement
+
+    expect(editButton.disabled).toBe(false)
 
     const calendarProps = mocks.getCalendarProps()
     expect(calendarProps.initialRange).toEqual(selectedRange)
@@ -206,7 +242,7 @@ describe('BookingManageDrawer', () => {
     await user.click(screen.getByRole('button', { name: 'Close' }))
     expect(handleClose).toHaveBeenCalledTimes(1)
 
-    await user.click(screen.getByRole('button', { name: 'Edit' }))
+    await user.click(editButton)
     expect(handleConfirm).toHaveBeenCalledTimes(1)
 
     expect(formatRangeLabelMock).toHaveBeenCalledWith(
@@ -214,8 +250,14 @@ describe('BookingManageDrawer', () => {
       'Select a new stay range',
     )
     expect(useBookingManageDrawerMock).toHaveBeenCalledWith(
-      expect.objectContaining({ value, onCallback, onClose }),
+      expect.objectContaining({
+        value,
+        onSuccessCallback: onCallback,
+        onClose,
+      }),
     )
-    expect(screen.getByTestId('drawer')).toHaveAttribute('data-open', 'true')
+    const drawer = screen.getByTestId('drawer')
+
+    expect(drawer.getAttribute('data-open')).toBe('true')
   })
 })

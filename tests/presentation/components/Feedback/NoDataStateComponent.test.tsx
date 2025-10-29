@@ -6,7 +6,10 @@ describe('NoDataStateComponent', () => {
   it('should display the provided message', () => {
     render(<MessageComponent message="Nothing to see here" />)
 
-    expect(screen.getByText('Nothing to see here')).toBeInTheDocument()
+    const message = screen.getByText('Nothing to see here')
+
+    expect(message).toBeTruthy()
+    expect(message.textContent).toBe('Nothing to see here')
   })
 
   it('should render the call-to-action when provided', () => {
@@ -17,8 +20,9 @@ describe('NoDataStateComponent', () => {
       />,
     )
 
-    expect(
-      screen.getByRole('button', { name: 'Search again' }),
-    ).toBeInTheDocument()
+    const button = screen.getByRole('button', { name: 'Search again' })
+
+    expect(button).toBeTruthy()
+    expect((button as HTMLButtonElement).type).toBe('button')
   })
 })

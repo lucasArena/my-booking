@@ -4,8 +4,3 @@ export interface IPropertyBookingSelection {
   propertyBooking: IPropertyBooking
   bookingId: number
 }
-
-export type TBookingRange = {
-  checkIn: Date | null
-  checkOut: Date | null
-}

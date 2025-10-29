@@ -24,8 +24,11 @@ describe('ApplicationProviderComponent', () => {
       </ApplicationProviderComponent>,
     )
 
-    expect(screen.getByText('App content')).toBeInTheDocument()
-    expect(screen.getByTestId('layout-mock')).toBeInTheDocument()
+    const content = screen.getByText('App content')
+    const layout = screen.getByTestId('layout-mock')
+
+    expect(content).toBeTruthy()
+    expect(layout).toBeTruthy()
     expect(layoutMock).toHaveBeenCalledWith(
       expect.objectContaining({ children: expect.anything() }),
     )

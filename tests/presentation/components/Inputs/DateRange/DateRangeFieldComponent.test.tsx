@@ -50,7 +50,9 @@ describe('DateRangeFieldComponent', () => {
       />,
     )
 
-    expect(screen.getByRole('textbox')).toHaveValue('Pick your dates')
+    const input = screen.getByRole('textbox') as HTMLInputElement
+
+    expect(input.value).toBe('Pick your dates')
   })
 
   it('should open the calendar popover when clicked', async () => {
@@ -68,7 +70,7 @@ describe('DateRangeFieldComponent', () => {
 
     await user.click(screen.getByRole('textbox'))
 
-    expect(screen.getByTestId('calendar-range')).toBeInTheDocument()
+    expect(screen.getByTestId('calendar-range')).toBeTruthy()
     expect(calendarRangeMock).toHaveBeenCalled()
 
     const props = getCalendarProps()
@@ -100,9 +102,13 @@ describe('DateRangeFieldComponent', () => {
       getCalendarProps().onRangeChange(nextRange)
     })
 
-    await waitFor(() =>
-      expect(screen.getByRole('button', { name: 'Apply' })).not.toBeDisabled(),
-    )
+    await waitFor(() => {
+      const applyButton = screen.getByRole('button', {
+        name: 'Apply',
+      }) as HTMLButtonElement
+
+      expect(applyButton.disabled).toBe(false)
+    })
 
     await user.click(screen.getByRole('button', { name: 'Apply' }))
 

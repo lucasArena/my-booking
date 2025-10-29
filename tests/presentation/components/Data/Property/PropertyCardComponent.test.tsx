@@ -13,13 +13,14 @@ describe('PropertyCardComponent', () => {
   it('should render the property information', () => {
     render(<PropertyCardComponent {...baseProps} />)
 
-    expect(screen.getByRole('img', { name: baseProps.name })).toHaveAttribute(
-      'src',
-      baseProps.img,
-    )
-    expect(screen.getByText(baseProps.name)).toBeInTheDocument()
-    expect(screen.getByText(baseProps.description)).toBeInTheDocument()
-    expect(screen.getByText(baseProps.location)).toBeInTheDocument()
+    const image = screen.getByRole('img', { name: baseProps.name })
+    const { name, description, location } = baseProps
+
+    expect(image).toBeTruthy()
+    expect(image.getAttribute('src')).toBe(baseProps.img)
+    expect(screen.getByText(name)).toBeTruthy()
+    expect(screen.getByText(description)).toBeTruthy()
+    expect(screen.getByText(location)).toBeTruthy()
   })
 
   it('should render optional actions when provided', () => {
@@ -30,14 +31,12 @@ describe('PropertyCardComponent', () => {
       />,
     )
 
-    expect(screen.getByRole('button', { name: 'Book now' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Book now' })).toBeTruthy()
   })
 
   it('should hide actions section when no actions are provided', () => {
     render(<PropertyCardComponent {...baseProps} actions={undefined} />)
 
-    expect(
-      screen.queryByRole('button', { name: 'Book now' }),
-    ).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Book now' })).toBeNull()
   })
 })

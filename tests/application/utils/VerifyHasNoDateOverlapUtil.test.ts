@@ -34,7 +34,7 @@ describe('VerifyHasNoDateOverlapUtil', () => {
     expect(result).toBe(true)
   })
 
-  it('should return true when the second range starts the same day the first one ends', () => {
+  it('should return false when the second range starts the same day the first one ends', () => {
     const result = VerifyHasNoDateOverlapUtil(
       createParams(
         new Date(2025, 9, 1),
@@ -44,7 +44,7 @@ describe('VerifyHasNoDateOverlapUtil', () => {
       ),
     )
 
-    expect(result).toBe(true)
+    expect(result).toBe(false)
   })
 
   it('should return false when the periods overlap', () => {

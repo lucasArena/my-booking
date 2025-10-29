@@ -5,6 +5,7 @@ import { ApplicationProviderComponent } from '@/presentation/components/Provider
 import { RoutesConfig } from '@/application/routes/Routes.tsx'
 import { PropertyProviderComponent } from '@/presentation/components/Providers/Property/PropertyProviderComponent.tsx'
 import { HttpClientAxios } from '@/infra/HttpClient/HttpClientAxios'
+import '@/App.styles.css'
 
 HttpClientAxios.getInstance({
   baseURL: 'http://localhost:3000',

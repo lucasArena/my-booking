@@ -3,27 +3,32 @@ import type { TBookingRange } from '@/domain/entities/Booking/Booking.types'
 import type { IProperty } from '@/domain/entities/Property/Property.types'
 import { usePropertyGetAvailable } from '@/presentation/hooks/UseProperty/UsePropertyGetAvailable'
 import { formatDate, isValid } from 'date-fns'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
+import type { IBookingSearchForm } from '@/presentation/screens/Booking/Search/BookingSearch.types'
+
+const defaultValues: IBookingSearchForm = {
+  dateRange: {
+    checkIn: null,
+    checkOut: null,
+  },
+}
 
 export const useBookingSearch = () => {
   const location = useLocation()
   const navigate = useNavigate()
 
-  const { data, error, isLoading, handleFetch, handleResetState } =
+  const { data, error, isLoading, isSuccess, handleFetch } =
     usePropertyGetAvailable()
 
-  const selectedRange = useMemo(
-    () => ({
-      checkIn: ParseDateLocalUtil(
-        new URLSearchParams(location.search).get('checkin'),
-      ),
-      checkOut: ParseDateLocalUtil(
-        new URLSearchParams(location.search).get('checkout'),
-      ),
-    }),
-    [location.search],
-  )
+  const { control, setValue, watch } = useForm<IBookingSearchForm>({
+    defaultValues,
+  })
+
+  const formValues = watch()
+
+  const searchParams = new URLSearchParams(location.search)
 
   const safeData = data ?? []
 
@@ -32,12 +37,12 @@ export const useBookingSearch = () => {
       return error
     }
 
-    if (!selectedRange.checkIn || !selectedRange.checkOut) {
+    if (!formValues.dateRange.checkIn || !formValues.dateRange.checkOut) {
       return ''
     }
 
     const isCheckinGreaterThanCheckout =
-      selectedRange.checkIn > selectedRange.checkOut
+      formValues.dateRange.checkIn > formValues.dateRange.checkOut
 
     if (isCheckinGreaterThanCheckout) {
       return 'Check-in date must be before check-out date.'
@@ -65,49 +70,54 @@ export const useBookingSearch = () => {
   }
 
   const handleRangeChange = (range: TBookingRange) => {
-    const checkin =
-      range.checkIn && isValid(range.checkIn)
-        ? range.checkIn.toISOString().split('T')[0]
-        : ''
-    const checkout =
-      range.checkOut && isValid(range.checkOut)
-        ? range.checkOut.toISOString().split('T')[0]
-        : ''
-
-    if (!checkin || !checkout) {
-      handleResetState()
-    }
-
-    navigate(`?checkin=${checkin}&checkout=${checkout}`)
+    navigate(
+      `?checkin=${formatDate(range.checkIn!, 'yyyy-MM-dd')}&checkout=${formatDate(range.checkOut!, 'yyyy-MM-dd')}`,
+    )
   }
 
-  const handleBootstrap = () => {
-    if (!selectedRange.checkIn || !selectedRange.checkOut) {
+  const handleRetry = () => {
+    if (!formValues.dateRange.checkIn || !formValues.dateRange.checkOut) {
       return
     }
 
     handleFetch({
-      checkIn: formatDate(selectedRange.checkIn, 'yyyy-MM-dd'),
-      checkOut: formatDate(selectedRange.checkOut, 'yyyy-MM-dd'),
+      checkIn: formatDate(formValues.dateRange.checkIn, 'yyyy-MM-dd'),
+      checkOut: formatDate(formValues.dateRange.checkOut, 'yyyy-MM-dd'),
     })
   }
 
   useEffect(() => {
-    handleBootstrap()
+    const checkIn = searchParams.get('checkin')
+    const checkOut = searchParams.get('checkout')
+
+    const safeCheckIn = ParseDateLocalUtil(checkIn)
+    const safeCheckOut = ParseDateLocalUtil(checkOut)
+
+    setValue('dateRange.checkIn', safeCheckIn)
+    setValue('dateRange.checkOut', safeCheckOut)
+
+    if (isValid(safeCheckIn) && isValid(safeCheckOut)) {
+      handleFetch({
+        checkIn: formatDate(safeCheckIn!, 'yyyy-MM-dd'),
+        checkOut: formatDate(safeCheckOut!, 'yyyy-MM-dd'),
+      })
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedRange])
+  }, [location.search])
 
   return {
+    control,
+    formValues,
     data: safeData,
     errorMessage,
     isLoading,
+    isSuccess,
     handleCloseBookingDrawer,
     handleConfirmBooking,
     handleFetch,
-    handleBootstrap,
+    handleRetry,
     handleOpenBookingDrawer,
     handleRangeChange,
     selectedProperty,
-    selectedRange,
   }
 }
