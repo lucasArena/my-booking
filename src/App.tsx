@@ -8,7 +8,7 @@ import { HttpClientAxios } from '@/infra/HttpClient/HttpClientAxios'
 import '@/App.styles.css'
 
 HttpClientAxios.getInstance({
-  baseURL: 'http://localhost:3000',
+  baseURL: process.env.VITE_BASE_URL,
 })
 
 export const App: React.FC = () => (
