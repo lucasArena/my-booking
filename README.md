@@ -2,6 +2,17 @@
 
 My Booking is a React + TypeScript single-page application for browsing properties, booking new stays, and managing existing bookings.
 
+## Tech Stack
+
+- **Framework:** React 19 + TypeScript
+- **Build tooling:** Vite 7 with the official React plugin (Fast Refresh)
+- **UI library:** Material UI 7 with Emotion styling
+- **Date handling:** date-fns & MUI X Date Pickers
+- **Routing:** React Router DOM 7
+- **Notifications:** React Toastify
+- **State & utilities:** Custom context providers (`Application`, `Property`)
+- **Testing:** Vitest 2 with React Testing Library and user-event and Cypress
+
 ## Getting Started
 
 ### Prerequisites
@@ -43,17 +54,6 @@ My Booking is a React + TypeScript single-page application for browsing properti
 | `yarn test`    | Start Vitest in watch mode.                                |
 | `yarn cy:run`  | Execute the Cypress end-to-end suite in headless mode.     |
 
-## Tech Stack
-
-- **Framework:** React 19 + TypeScript
-- **Build tooling:** Vite 7 with the official React plugin (Fast Refresh)
-- **UI library:** Material UI 7 with Emotion styling
-- **Date handling:** date-fns & MUI X Date Pickers
-- **Routing:** React Router DOM 7
-- **Notifications:** React Toastify
-- **State & utilities:** Custom context providers (`Application`, `Property`)
-- **Testing:** Vitest 2 with React Testing Library and user-event and Cypress
-
 ## Architecture Overview
 
 The project follows a lightweight hexagonal-inspired structure that keeps UI, domain models, and orchestration logic isolated:
@@ -88,12 +88,6 @@ tests/
 ```
 
 Aliases configured in `vite.config.ts` allow concise imports such as `@/presentation/...` and `@/tests/...` across the app and test suites.
-
-## Core Features
-
-1. **Booking search** – sticky filter panel powered by the date range field, property cards sourced from the mock api using json-server.
-2. **My Bookings** – lists aggregated reservations grouped by property, supports cancellation and date changes, and adapts drawer placement for mobile vs. desktop breakpoints.
-3. **Context-managed state** – `PropertyProviderComponent` stores property inventory, handles booking mutations, and exposes availability queries with date-overlap validation.
 
 ## Testing Strategy
 

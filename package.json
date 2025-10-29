@@ -7,7 +7,7 @@
     "dev": "vite",
     "test": "vitest run",
     "lint": "eslint .",
-    "server": "node ./server/server.js",
+    "server": "node ./server/server.js --port 3000",
     "cy:run": "cypress run --config-file cypress.config.cjs"
   },
   "dependencies": {

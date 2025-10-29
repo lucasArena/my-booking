@@ -1,4 +1,4 @@
-describe('My bookings flow', () => {
+describe('Cancel booking flow', () => {
   const property = {
     id: 1,
     img: 'https://plus.unsplash.com/premium_photo-1661950439212-558fa5cc82e0?auto=format&fit=crop&q=80&w=3251',
@@ -52,18 +52,19 @@ describe('My bookings flow', () => {
         },
       ])
     }).as('getMyBookings')
+
+    cy.intercept('DELETE', '**/bookings/*', req => {
+      const bookingId = Number(req.url.split('/').pop())
+      bookings = bookings.filter(booking => booking.id !== bookingId)
+
+      req.reply({ statusCode: 204, body: {} })
+    }).as('cancelBooking')
   }
 
   const formatDate = (year, monthIndex, day) =>
     new Intl.DateTimeFormat('en-US').format(new Date(year, monthIndex, day))
 
-  beforeEach(() => {
-    resetState()
-    setupNetwork()
-    cy.clock(new Date(2025, 9, 1).getTime(), ['Date'])
-  })
-
-  it('creates a booking and displays it in My Bookings', () => {
+  const createBookingThroughUi = () => {
     cy.visit('/')
 
     cy.get('[data-cy="date-range-input"]').click()
@@ -83,9 +84,37 @@ describe('My bookings flow', () => {
     cy.wait('@getMyBookings')
 
     cy.url().should('include', '/my-bookings')
-    cy.contains('Midtown Skyline Loft').should('be.visible')
 
     const stayRange = `${formatDate(2025, 9, 1)} – ${formatDate(2025, 9, 4)}`
     cy.contains(stayRange).should('be.visible')
+
+    return stayRange
+  }
+
+  beforeEach(() => {
+    resetState()
+    setupNetwork()
+    cy.clock(new Date(2025, 9, 1).getTime(), ['Date'])
+  })
+
+  it('allows users to cancel an existing booking', () => {
+    const stayRange = createBookingThroughUi()
+
+    cy.contains('button', 'Cancel booking').should('be.enabled').first().click()
+
+    cy.contains('button', 'Confirm').should('be.visible').click()
+
+    cy.wait('@cancelBooking')
+    cy.wait('@getMyBookings')
+
+    cy.contains('Booking cancelled successfully', { timeout: 10000 }).should(
+      'be.visible',
+    )
+
+    cy.get('body').should('not.contain', stayRange)
+    cy.contains('You have no bookings yet.', { timeout: 10000 }).should(
+      'be.visible',
+    )
+    cy.url().should('include', '/my-bookings')
   })
 })
