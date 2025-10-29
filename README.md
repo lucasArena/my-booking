@@ -91,20 +91,37 @@ Aliases configured in `vite.config.ts` allow concise imports such as `@/presenta
 
 ## Testing Strategy
 
-- **Component & drawer tests** live under `tests/presentation/...` and validate rendering, user flows, and integration with mocked hooks.
-- **Utility tests** under `tests/application/utils` ensure deterministic helpers for formatting, parsing, and overlap checks.
+The project includes two complementary automated suites that cover both fast feedback and user flows end-to-end.
 
-Run the unit test suite anytime:
+### Vitest unit & integration tests
+
+- Source files live in `tests/application/...` and `tests/presentation/...`, mirroring the production folder structure for easy discoverability.
+- The suite runs against a JSDOM environment with React Testing Library, so no browser is required.
+
+#### Run the suite
 
 ```bash
 yarn test
 ```
 
-Run the end-to-end Cypress flow (ensure the dev server is running on `http://localhost:5173`):
+- Executes `vitest run` once in CI-friendly mode.
+- Optional developer loops:
+  - `yarn vitest --watch` keeps Vitest running interactively.
+  - `yarn vitest run --coverage` generates Istanbul coverage reports inside `coverage/`.
+
+### Cypress end-to-end tests
+
+- Specs live in `cypress/e2e`, covering booking creation, updates, cancellations, and list views.
+- Tests expect the mock API (`yarn server`) and the Vite dev server (`yarn dev`) to be running locally at `http://localhost:5173`.
+
+#### Run the suite headless
 
 ```bash
 yarn cy:run
 ```
+
+- Uses the shared `cypress.config.cjs` configuration in CI/headless mode.
+- For local debugging, launch the interactive runner with `yarn cypress open --config-file cypress.config.cjs` after starting the dev servers.
 
 ## Future Improvements
 
